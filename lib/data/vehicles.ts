@@ -189,6 +189,9 @@ export const chileanVehicles: Record<string, VehicleBrand> = {
         models: {
             'Tracker': { name: 'Tracker', versions: ['LS', 'LT', 'Premier', 'RS'] },
             'Onix': { name: 'Onix', versions: ['Joy', 'LT', 'Premier', 'RS'] },
+            'Aveo': { name: 'Aveo', versions: ['LS', 'LT'] },
+            'Sonic': { name: 'Sonic', versions: ['LT', 'LTZ', 'RS'] },
+            'Optra': { name: 'Optra', versions: ['LS', 'LT'] },
             'Cruze': { name: 'Cruze', versions: ['LS', 'LT', 'Premier'] },
             'S10': { name: 'S10', versions: ['LS 4x2', 'LT 4x2', 'LT 4x4', 'High Country'] },
             'Captiva': { name: 'Captiva', versions: ['LS', 'LT', 'Premier'] },

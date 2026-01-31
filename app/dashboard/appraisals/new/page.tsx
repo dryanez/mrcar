@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
+import { useForm, type FieldErrors } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { appraisalSchema, type AppraisalFormData } from '@/lib/validations/appraisal'
 import { getBrands, getModels, getVersions } from '@/lib/data/vehicles'
@@ -110,6 +110,27 @@ export default function NewAppraisalPage() {
         }
     }
 
+    const onInvalid = (errors: FieldErrors<AppraisalFormData>) => {
+        console.error('Validation errors:', errors)
+        const errorKeys = Object.keys(errors)
+
+        // Map error keys to steps
+        if (errorKeys.some(key => key.startsWith('client'))) {
+            setCurrentStep(1)
+        } else if (errorKeys.some(key => key.startsWith('vehicle'))) {
+            setCurrentStep(2)
+        } else if (['permisoCirculacion', 'revisionTecnica', 'soap', 'seguro', 'enPrenda', 'tasacion', 'numDueños'].some(key => errorKeys.includes(key))) {
+            setCurrentStep(3)
+        } else if (errorKeys.some(key => key.startsWith('features'))) {
+            setCurrentStep(4)
+        } else {
+            setCurrentStep(5)
+        }
+
+        // Optional: you could add a toast here
+        alert('Please correct the errors in the form before submitting.')
+    }
+
     const nextStep = () => {
         if (currentStep < STEPS.length) {
             setCurrentStep(currentStep + 1)
@@ -192,7 +213,7 @@ export default function NewAppraisalPage() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
                 <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
                     {/* Step 1: Client Info */}
                     {currentStep === 1 && (

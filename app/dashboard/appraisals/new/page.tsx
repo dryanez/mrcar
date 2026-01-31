@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { appraisalSchema, type AppraisalFormData } from '@/lib/validations/appraisal'
 import { getBrands, getModels, getVersions } from '@/lib/data/vehicles'
 import { getRegions, getComunas } from '@/lib/data/geo-chile'
+import PriceSuggestions from '@/components/PriceSuggestions'
 import {
     User,
     Car,
@@ -93,25 +94,33 @@ export default function NewAppraisalPage() {
     const permisoCirculacion = watch('permisoCirculacion')
     const revisionTecnica = watch('revisionTecnica')
 
+    // Watch vehicle details for price suggestions
+    const vehicleMarca = watch('vehicleMarca')
+    const vehicleModelo = watch('vehicleModelo')
+    const vehicleAño = watch('vehicleAño')
+
     const onSubmit = async (data: AppraisalFormData) => {
         setSaving(true)
         try {
-            // TODO: Save to Supabase
-            console.log('Appraisal data:', data)
+            const { createAppraisal } = await import('@/lib/actions/appraisal-actions')
+            const result = await createAppraisal(data)
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000))
+            if (!result.success) {
+                alert(`Error: ${result.error}`)
+                return
+            }
 
             router.push('/dashboard/appraisals')
         } catch (error) {
             console.error('Error saving appraisal:', error)
+            alert('Error saving appraisal. Please try again.')
         } finally {
             setSaving(false)
         }
     }
 
     const onInvalid = (errors: FieldErrors<AppraisalFormData>) => {
-        console.error('Validation errors:', errors)
+        console.error('Validation errors:', JSON.stringify(errors, null, 2))
         const errorKeys = Object.keys(errors)
 
         // Map error keys to steps
@@ -127,8 +136,7 @@ export default function NewAppraisalPage() {
             setCurrentStep(5)
         }
 
-        // Optional: you could add a toast here
-        alert('Please correct the errors in the form before submitting.')
+        alert(`Please correct the following errors:\n${errorKeys.join('\n')}`)
     }
 
     const nextStep = () => {
@@ -459,10 +467,25 @@ export default function NewAppraisalPage() {
                                     type="number"
                                     {...register('numDueños', { valueAsNumber: true })}
                                 />
+
+                                {/* Price Suggestions */}
+                                <div className="md:col-span-2">
+                                    {vehicleMarca && vehicleModelo && vehicleAño && (
+                                        <PriceSuggestions
+                                            marca={vehicleMarca}
+                                            modelo={vehicleModelo}
+                                            ano={vehicleAño}
+                                            onSelectPrice={(price) => setValue('tasacion', price)}
+                                        />
+                                    )}
+                                </div>
+
                                 <FormInput
                                     label="Tasación (CLP)"
                                     type="number"
-                                    {...register('tasacion', { valueAsNumber: true })}
+                                    {...register('tasacion', {
+                                        setValueAs: (v) => v === "" ? undefined : Number(v)
+                                    })}
                                 />
                             </div>
                         </div>
@@ -504,7 +527,9 @@ export default function NewAppraisalPage() {
                                 <FormInput
                                     label="Número de Airbags"
                                     type="number"
-                                    {...register('airbags', { valueAsNumber: true })}
+                                    {...register('airbags', {
+                                        setValueAs: (v) => v === "" ? undefined : Number(v)
+                                    })}
                                 />
                                 <FormInput
                                     label="Número de Llaves"

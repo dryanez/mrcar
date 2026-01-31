@@ -1,8 +1,10 @@
 import Link from 'next/link'
-import { Plus, Search, Filter } from 'lucide-react'
+import { Plus, Search, Filter, Calendar, Car } from 'lucide-react'
+import { getAppraisals } from '@/lib/actions/appraisal-actions'
 
-export default function AppraisalsPage() {
-    const appraisals = [] // Will be populated from Supabase
+export default async function AppraisalsPage() {
+    const result = await getAppraisals()
+    const appraisals = result.data || []
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -66,7 +68,58 @@ export default function AppraisalsPage() {
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {/* Appraisal items will be rendered here */}
+                        {appraisals.map((appraisal: any) => (
+                            <Link
+                                key={appraisal.id}
+                                href={`/dashboard/appraisals/${appraisal.id}`}
+                                className="block p-6 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all"
+                            >
+                                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                                <Car className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                                    {appraisal.client_nombre} {appraisal.client_apellido}
+                                                </h3>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                                    {appraisal.vehicle_marca} {appraisal.vehicle_modelo} {appraisal.vehicle_ano}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                            <span className="flex items-center gap-1">
+                                                <strong>Patente:</strong> {appraisal.vehicle_patente}
+                                            </span>
+                                            <span className="flex items-center gap-1">
+                                                <strong>KM:</strong> {appraisal.vehicle_km?.toLocaleString()}
+                                            </span>
+                                            {appraisal.tasacion && (
+                                                <span className="flex items-center gap-1">
+                                                    <strong>Tasación:</strong> ${appraisal.tasacion?.toLocaleString()}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <div className="text-right">
+                                            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                                <Calendar className="w-4 h-4" />
+                                                {new Date(appraisal.created_at).toLocaleDateString()}
+                                            </div>
+                                            <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full mt-2 ${appraisal.status === 'draft'
+                                                    ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                                    : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                                }`}>
+                                                {appraisal.status || 'draft'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
                 )}
             </div>

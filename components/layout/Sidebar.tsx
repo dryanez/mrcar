@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import {
     LayoutDashboard,
@@ -56,8 +57,13 @@ export default function Sidebar() {
                     <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
                         {!collapsed && (
                             <Link href="/dashboard" className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
-                                    <Car className="w-6 h-6 text-white" />
+                                <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/30">
+                                    <Image
+                                        src="/mrcar-logo.png"
+                                        alt="MrCar Logo"
+                                        fill
+                                        className="object-cover"
+                                    />
                                 </div>
                                 <span className="font-bold text-xl text-gray-900 dark:text-white">MrCar</span>
                             </Link>

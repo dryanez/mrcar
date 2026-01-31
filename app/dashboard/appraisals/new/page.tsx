@@ -1,0 +1,575 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { appraisalSchema, type AppraisalFormData } from '@/lib/validations/appraisal'
+import {
+    User,
+    Car,
+    FileText,
+    Settings,
+    Key,
+    CheckCircle2,
+    Save,
+    Printer,
+    ArrowLeft,
+    ArrowRight,
+    Disc
+} from 'lucide-react'
+
+const STEPS = [
+    { id: 1, name: 'Client Info', icon: User },
+    { id: 2, name: 'Vehicle Details', icon: Car },
+    { id: 3, name: 'Documentation', icon: FileText },
+    { id: 4, name: 'Features', icon: Settings },
+    { id: 5, name: 'Technical', icon: Key },
+]
+
+export default function NewAppraisalPage() {
+    const router = useRouter()
+    const [currentStep, setCurrentStep] = useState(1)
+    const [saving, setSaving] = useState(false)
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        setValue,
+        formState: { errors },
+    } = useForm<AppraisalFormData>({
+        resolver: zodResolver(appraisalSchema),
+        defaultValues: {
+            vehicleTransmision: 'Manual',
+            vehicleCombustible: 'Bencina',
+            enPrenda: false,
+            numLlaves: 2,
+            permisoCirculacion: null,
+            revisionTecnica: null,
+            soap: null,
+            seguro: null,
+            neumaticos: [true, true, true, true, true],
+            features: {
+                aireAcondicionado: false,
+                bluetooth: false,
+                calefactorAsiento: false,
+                conexionUsb: false,
+                gps: false,
+                isofix: false,
+                smartKey: false,
+                lucesLed: false,
+                mandosVolante: false,
+                sensorEstacionamiento: false,
+                sonidoPremium: false,
+                techoElectrico: false,
+                ventiladorAsiento: false,
+                carplayAndroid: false,
+            },
+        },
+    })
+
+    const neumaticos = watch('neumaticos')
+    const enPrenda = watch('enPrenda')
+    const permisoCirculacion = watch('permisoCirculacion')
+    const revisionTecnica = watch('revisionTecnica')
+
+    const onSubmit = async (data: AppraisalFormData) => {
+        setSaving(true)
+        try {
+            // TODO: Save to Supabase
+            console.log('Appraisal data:', data)
+
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000))
+
+            router.push('/dashboard/appraisals')
+        } catch (error) {
+            console.error('Error saving appraisal:', error)
+        } finally {
+            setSaving(false)
+        }
+    }
+
+    const nextStep = () => {
+        if (currentStep < STEPS.length) {
+            setCurrentStep(currentStep + 1)
+        }
+    }
+
+    const prevStep = () => {
+        if (currentStep > 1) {
+            setCurrentStep(currentStep - 1)
+        }
+    }
+
+    const toggleNeumatico = (index: number) => {
+        const newNeumaticos = [...neumaticos]
+        newNeumaticos[index] = !newNeumaticos[index]
+        setValue('neumaticos', newNeumaticos)
+    }
+
+    return (
+        <div className="max-w-5xl mx-auto space-y-6 animate-fade-in">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                        New Vehicle Appraisal
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                        Complete the form to create a new appraisal
+                    </p>
+                </div>
+                <button
+                    onClick={() => router.back()}
+                    className="flex items-center gap-2 px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                    Back
+                </button>
+            </div>
+
+            {/* Progress Steps */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+                <div className="flex items-center justify-between">
+                    {STEPS.map((step, index) => {
+                        const Icon = step.icon
+                        const isActive = currentStep === step.id
+                        const isCompleted = currentStep > step.id
+
+                        return (
+                            <div key={step.id} className="flex items-center flex-1">
+                                <div className="flex flex-col items-center flex-1">
+                                    <div
+                                        className={`
+                      w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300
+                      ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-110' : ''}
+                      ${isCompleted ? 'bg-green-600 text-white' : ''}
+                      ${!isActive && !isCompleted ? 'bg-gray-200 dark:bg-gray-800 text-gray-400' : ''}
+                    `}
+                                    >
+                                        {isCompleted ? <CheckCircle2 className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
+                                    </div>
+                                    <span className={`
+                    text-sm font-medium mt-2 hidden md:block
+                    ${isActive ? 'text-blue-600 dark:text-blue-400' : ''}
+                    ${isCompleted ? 'text-green-600 dark:text-green-400' : ''}
+                    ${!isActive && !isCompleted ? 'text-gray-400' : ''}
+                  `}>
+                                        {step.name}
+                                    </span>
+                                </div>
+                                {index < STEPS.length - 1 && (
+                                    <div className={`
+                    h-1 flex-1 mx-2 rounded transition-colors
+                    ${currentStep > step.id ? 'bg-green-600' : 'bg-gray-200 dark:bg-gray-800'}
+                  `} />
+                                )}
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+
+            {/* Form */}
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+                    {/* Step 1: Client Info */}
+                    {currentStep === 1 && (
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                                Client Information
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormInput
+                                    label="Nombre *"
+                                    {...register('clientNombre')}
+                                    error={errors.clientNombre?.message}
+                                />
+                                <FormInput
+                                    label="Apellido *"
+                                    {...register('clientApellido')}
+                                    error={errors.clientApellido?.message}
+                                />
+                                <FormInput
+                                    label="Email"
+                                    type="email"
+                                    {...register('clientEmail')}
+                                    error={errors.clientEmail?.message}
+                                />
+                                <FormInput
+                                    label="Teléfono *"
+                                    {...register('clientTelefono')}
+                                    error={errors.clientTelefono?.message}
+                                />
+                                <FormInput
+                                    label="RUT *"
+                                    placeholder="12.345.678-9"
+                                    {...register('clientRut')}
+                                    error={errors.clientRut?.message}
+                                />
+                                <FormInput
+                                    label="Comuna"
+                                    {...register('clientComuna')}
+                                    error={errors.clientComuna?.message}
+                                />
+                                <div className="md:col-span-2">
+                                    <FormInput
+                                        label="Dirección"
+                                        {...register('clientDireccion')}
+                                        error={errors.clientDireccion?.message}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 2: Vehicle Details */}
+                    {currentStep === 2 && (
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                                Vehicle Details
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormInput
+                                    label="Marca *"
+                                    {...register('vehicleMarca')}
+                                    error={errors.vehicleMarca?.message}
+                                />
+                                <FormInput
+                                    label="Modelo *"
+                                    {...register('vehicleModelo')}
+                                    error={errors.vehicleModelo?.message}
+                                />
+                                <FormInput
+                                    label="Versión"
+                                    {...register('vehicleVersion')}
+                                    error={errors.vehicleVersion?.message}
+                                />
+                                <FormInput
+                                    label="Año *"
+                                    type="number"
+                                    {...register('vehicleAño', { valueAsNumber: true })}
+                                    error={errors.vehicleAño?.message}
+                                />
+                                <FormInput
+                                    label="Kilometraje *"
+                                    type="number"
+                                    {...register('vehicleKm', { valueAsNumber: true })}
+                                    error={errors.vehicleKm?.message}
+                                />
+                                <FormInput
+                                    label="Patente *"
+                                    {...register('vehiclePatente')}
+                                    error={errors.vehiclePatente?.message}
+                                />
+                                <FormInput
+                                    label="Motor (cc)"
+                                    {...register('vehicleMotor')}
+                                    error={errors.vehicleMotor?.message}
+                                />
+                                <FormInput
+                                    label="Color"
+                                    {...register('vehicleColor')}
+                                    error={errors.vehicleColor?.message}
+                                />
+                                <FormSelect
+                                    label="Transmisión *"
+                                    {...register('vehicleTransmision')}
+                                    options={['Manual', 'Automático']}
+                                    error={errors.vehicleTransmision?.message}
+                                />
+                                <FormSelect
+                                    label="Combustible *"
+                                    {...register('vehicleCombustible')}
+                                    options={['Bencina', 'Diesel', 'Eléctrico', 'Híbrido']}
+                                    error={errors.vehicleCombustible?.message}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 3: Documentation */}
+                    {currentStep === 3 && (
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                                Documentation & Legal Status
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl space-y-4">
+                                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Permiso de Circulación
+                                    </label>
+                                    <div className="flex gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setValue('permisoCirculacion', true)}
+                                            className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${permisoCirculacion === true
+                                                    ? 'bg-green-100 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-400'
+                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                }`}
+                                        >
+                                            Sí
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setValue('permisoCirculacion', false)}
+                                            className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${permisoCirculacion === false
+                                                    ? 'bg-red-100 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-400'
+                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                }`}
+                                        >
+                                            No
+                                        </button>
+                                    </div>
+                                    <FormInput
+                                        label="Vencimiento"
+                                        type="month"
+                                        {...register('vencePermiso')}
+                                    />
+                                </div>
+
+                                <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl space-y-4">
+                                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Revisión Técnica
+                                    </label>
+                                    <div className="flex gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setValue('revisionTecnica', true)}
+                                            className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${revisionTecnica === true
+                                                    ? 'bg-green-100 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-400'
+                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                }`}
+                                        >
+                                            Sí
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setValue('revisionTecnica', false)}
+                                            className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${revisionTecnica === false
+                                                    ? 'bg-red-100 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-400'
+                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                }`}
+                                        >
+                                            No
+                                        </button>
+                                    </div>
+                                    <FormInput
+                                        label="Vencimiento"
+                                        type="month"
+                                        {...register('venceRevision')}
+                                    />
+                                </div>
+
+                                <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl space-y-4">
+                                    <label className="flex items-center gap-3 cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            {...register('enPrenda')}
+                                            className="w-6 h-6 rounded accent-red-600"
+                                        />
+                                        <span className={`font-bold text-lg ${enPrenda ? 'text-red-600 dark:text-red-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                                            ¿ESTÁ EN PRENDA?
+                                        </span>
+                                    </label>
+                                    {enPrenda && (
+                                        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                                            <p className="text-sm text-red-700 dark:text-red-400">
+                                                ⚠️ Este vehículo tiene restricciones legales
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <FormInput
+                                    label="Número de Dueños"
+                                    type="number"
+                                    {...register('numDueños', { valueAsNumber: true })}
+                                />
+                                <FormInput
+                                    label="Tasación (CLP)"
+                                    type="number"
+                                    {...register('tasacion', { valueAsNumber: true })}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 4: Features */}
+                    {currentStep === 4 && (
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                                Vehicle Features
+                            </h2>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {Object.keys(watch('features')).map((feature) => (
+                                    <label
+                                        key={feature}
+                                        className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer hover:bg-white dark:hover:bg-gray-800 transition-all"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            {...register(`features.${feature as keyof AppraisalFormData['features']}`)}
+                                            className="w-5 h-5 rounded accent-blue-600"
+                                        />
+                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-200 capitalize">
+                                            {feature.replace(/([A-Z])/g, ' $1').trim()}
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Step 5: Technical */}
+                    {currentStep === 5 && (
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                                Technical Details
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <FormInput
+                                    label="Número de Airbags"
+                                    type="number"
+                                    {...register('airbags', { valueAsNumber: true })}
+                                />
+                                <FormInput
+                                    label="Número de Llaves"
+                                    type="number"
+                                    {...register('numLlaves', { valueAsNumber: true })}
+                                />
+
+                                <div className="md:col-span-2 space-y-4">
+                                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                        Estado de Neumáticos (4 + Repuesto)
+                                    </label>
+                                    <div className="flex gap-4">
+                                        {neumaticos.map((status, idx) => (
+                                            <button
+                                                key={idx}
+                                                type="button"
+                                                onClick={() => toggleNeumatico(idx)}
+                                                className={`
+                          w-16 h-16 rounded-full flex items-center justify-center border-2 transition-all transform hover:scale-110
+                          ${status
+                                                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/30'
+                                                        : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-400'
+                                                    }
+                        `}
+                                            >
+                                                <Disc className="w-8 h-8" />
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                        Click para marcar como bueno/malo
+                                    </p>
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                        Observaciones Generales
+                                    </label>
+                                    <textarea
+                                        {...register('observaciones')}
+                                        rows={6}
+                                        className="w-full p-4 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-400"
+                                        placeholder="Escriba detalles del motor, carrocería, choques, etc..."
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex items-center justify-between mt-6">
+                    <button
+                        type="button"
+                        onClick={prevStep}
+                        disabled={currentStep === 1}
+                        className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <ArrowLeft className="w-5 h-5" />
+                        Previous
+                    </button>
+
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                        >
+                            <Save className="w-5 h-5" />
+                            Save Draft
+                        </button>
+
+                        {currentStep < STEPS.length ? (
+                            <button
+                                type="button"
+                                onClick={nextStep}
+                                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/30 transition-all"
+                            >
+                                Next
+                                <ArrowRight className="w-5 h-5" />
+                            </button>
+                        ) : (
+                            <button
+                                type="submit"
+                                disabled={saving}
+                                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg shadow-lg shadow-green-500/30 transition-all disabled:opacity-50"
+                            >
+                                {saving ? (
+                                    <>
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        Saving...
+                                    </>
+                                ) : (
+                                    <>
+                                        <CheckCircle2 className="w-5 h-5" />
+                                        Complete Appraisal
+                                    </>
+                                )}
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </form>
+        </div>
+    )
+}
+
+// Form Input Component
+const FormInput = ({ label, error, ...props }: any) => (
+    <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {label}
+        </label>
+        <input
+            {...props}
+            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-400"
+        />
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+    </div>
+)
+
+// Form Select Component
+const FormSelect = ({ label, options, error, ...props }: any) => (
+    <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            {label}
+        </label>
+        <select
+            {...props}
+            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+        >
+            {options.map((option: string) => (
+                <option key={option} value={option}>
+                    {option}
+                </option>
+            ))}
+        </select>
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+    </div>
+)

@@ -253,7 +253,7 @@ export default function NewAppraisalPage() {
                                     {...register('vehicleMarca')}
                                     options={getBrands()}
                                     error={errors.vehicleMarca?.message}
-                                    onChange={(e) => {
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                         setValue('vehicleMarca', e.target.value)
                                         setValue('vehicleModelo', '')
                                         setValue('vehicleVersion', '')
@@ -265,7 +265,7 @@ export default function NewAppraisalPage() {
                                     options={watch('vehicleMarca') ? getModels(watch('vehicleMarca')) : []}
                                     error={errors.vehicleModelo?.message}
                                     disabled={!watch('vehicleMarca')}
-                                    onChange={(e) => {
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                                         setValue('vehicleModelo', e.target.value)
                                         setValue('vehicleVersion', '')
                                     }}

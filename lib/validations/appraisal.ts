@@ -9,6 +9,7 @@ export const appraisalSchema = z.object({
     clientRut: z.string().min(1, 'RUT is required'),
     clientDireccion: z.string().optional(),
     clientComuna: z.string().optional(),
+    clientRegion: z.string().optional(),
 
     // Vehicle Info
     vehicleMarca: z.string().min(1, 'Marca is required'),

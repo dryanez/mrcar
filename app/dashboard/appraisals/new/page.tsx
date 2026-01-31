@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { appraisalSchema, type AppraisalFormData } from '@/lib/validations/appraisal'
 import { getBrands, getModels, getVersions } from '@/lib/data/vehicles'
+import { getRegions, getComunas } from '@/lib/data/geo-chile'
 import {
     User,
     Car,
@@ -47,8 +48,10 @@ export default function NewAppraisalPage() {
             clientTelefono: '',
             clientRut: '',
             clientEmail: '',
-            clientDireccion: '',
+
+            clientRegion: '',
             clientComuna: '',
+            clientDireccion: '',
             vehicleMarca: '',
             vehicleModelo: '',
             vehicleVersion: '',
@@ -225,14 +228,27 @@ export default function NewAppraisalPage() {
                                     {...register('clientRut')}
                                     error={errors.clientRut?.message}
                                 />
-                                <FormInput
+                                <FormSelect
+                                    label="Región"
+                                    {...register('clientRegion')}
+                                    options={getRegions()}
+                                    error={errors.clientRegion?.message}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                                        setValue('clientRegion', e.target.value)
+                                        setValue('clientComuna', '')
+                                    }}
+                                />
+                                <FormSelect
                                     label="Comuna"
                                     {...register('clientComuna')}
+                                    options={watch('clientRegion') ? getComunas(watch('clientRegion') || '') : []}
                                     error={errors.clientComuna?.message}
+                                    disabled={!watch('clientRegion')}
                                 />
                                 <div className="md:col-span-2">
                                     <FormInput
                                         label="Dirección"
+                                        placeholder="Calle y número"
                                         {...register('clientDireccion')}
                                         error={errors.clientDireccion?.message}
                                     />

@@ -40,7 +40,7 @@ export default function NewAppraisalPage() {
         setValue,
         formState: { errors },
     } = useForm<AppraisalFormData>({
-        resolver: zodResolver(appraisalSchema),
+        resolver: zodResolver(appraisalSchema) as any,
         defaultValues: {
             clientNombre: '',
             clientApellido: '',

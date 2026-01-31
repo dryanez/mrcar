@@ -640,7 +640,7 @@ export const chileanVehicles: Record<string, VehicleBrand> = {
     },
 
     // OTHERS
-    Alfa Romeo: {
+    'Alfa Romeo': {
         name: 'Alfa Romeo',
         models: {
             'Giulia': { name: 'Giulia', versions: ['Super', 'Ti', 'Veloce', 'Quadrifoglio'] },

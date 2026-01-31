@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { appraisalSchema, type AppraisalFormData } from '@/lib/validations/appraisal'
+import { getBrands, getModels, getVersions } from '@/lib/data/vehicles'
 import {
     User,
     Car,
@@ -232,20 +233,38 @@ export default function NewAppraisalPage() {
                                 Vehicle Details
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <FormInput
+                                <FormSelect
                                     label="Marca *"
                                     {...register('vehicleMarca')}
+                                    options={getBrands()}
                                     error={errors.vehicleMarca?.message}
+                                    onChange={(e) => {
+                                        setValue('vehicleMarca', e.target.value)
+                                        setValue('vehicleModelo', '')
+                                        setValue('vehicleVersion', '')
+                                    }}
                                 />
-                                <FormInput
+                                <FormSelect
                                     label="Modelo *"
                                     {...register('vehicleModelo')}
+                                    options={watch('vehicleMarca') ? getModels(watch('vehicleMarca')) : []}
                                     error={errors.vehicleModelo?.message}
+                                    disabled={!watch('vehicleMarca')}
+                                    onChange={(e) => {
+                                        setValue('vehicleModelo', e.target.value)
+                                        setValue('vehicleVersion', '')
+                                    }}
                                 />
-                                <FormInput
+                                <FormSelect
                                     label="Versión"
                                     {...register('vehicleVersion')}
+                                    options={watch('vehicleMarca') && watch('vehicleModelo')
+                                        ? getVersions(watch('vehicleMarca'), watch('vehicleModelo'))
+                                        : []
+                                    }
                                     error={errors.vehicleVersion?.message}
+                                    disabled={!watch('vehicleModelo')}
+                                    allowCustom={true}
                                 />
                                 <FormInput
                                     label="Año *"
@@ -306,8 +325,8 @@ export default function NewAppraisalPage() {
                                             type="button"
                                             onClick={() => setValue('permisoCirculacion', true)}
                                             className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${permisoCirculacion === true
-                                                    ? 'bg-green-100 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-400'
-                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                ? 'bg-green-100 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-400'
+                                                : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
                                                 }`}
                                         >
                                             Sí
@@ -316,8 +335,8 @@ export default function NewAppraisalPage() {
                                             type="button"
                                             onClick={() => setValue('permisoCirculacion', false)}
                                             className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${permisoCirculacion === false
-                                                    ? 'bg-red-100 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-400'
-                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                ? 'bg-red-100 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-400'
+                                                : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
                                                 }`}
                                         >
                                             No
@@ -339,8 +358,8 @@ export default function NewAppraisalPage() {
                                             type="button"
                                             onClick={() => setValue('revisionTecnica', true)}
                                             className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${revisionTecnica === true
-                                                    ? 'bg-green-100 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-400'
-                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                ? 'bg-green-100 dark:bg-green-900/30 border-green-500 text-green-700 dark:text-green-400'
+                                                : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
                                                 }`}
                                         >
                                             Sí
@@ -349,8 +368,8 @@ export default function NewAppraisalPage() {
                                             type="button"
                                             onClick={() => setValue('revisionTecnica', false)}
                                             className={`flex-1 py-3 rounded-lg border-2 font-medium transition-all ${revisionTecnica === false
-                                                    ? 'bg-red-100 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-400'
-                                                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
+                                                ? 'bg-red-100 dark:bg-red-900/30 border-red-500 text-red-700 dark:text-red-400'
+                                                : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400'
                                                 }`}
                                         >
                                             No
@@ -555,20 +574,24 @@ const FormInput = ({ label, error, ...props }: any) => (
 )
 
 // Form Select Component
-const FormSelect = ({ label, options, error, ...props }: any) => (
+const FormSelect = ({ label, options, error, disabled, allowCustom, onChange, ...props }: any) => (
     <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             {label}
         </label>
         <select
             {...props}
-            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+            onChange={onChange}
+            disabled={disabled}
+            className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
         >
+            <option value="">Seleccionar...</option>
             {options.map((option: string) => (
                 <option key={option} value={option}>
                     {option}
                 </option>
             ))}
+            {allowCustom && <option value="__custom__">Otro (escribir manualmente)</option>}
         </select>
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>

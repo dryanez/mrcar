@@ -103,6 +103,9 @@ export default function NewAppraisalPage() {
     const [showPhotoCapture, setShowPhotoCapture] = useState(false)
     const [completedAppraisalId, setCompletedAppraisalId] = useState<string | null>(null)
 
+    // Debug logging
+    console.log('>>> RENDER: currentStep =', currentStep, 'showPhotoCapture =', showPhotoCapture, 'completedAppraisalId =', completedAppraisalId)
+
     const onSubmit = async (data: AppraisalFormData) => {
         console.log('>>> onSubmit called! Current step:', currentStep)
         console.log('>>> Form data:', data)
@@ -174,6 +177,7 @@ export default function NewAppraisalPage() {
 
     // Success screen after form submission
     if (showPhotoCapture && completedAppraisalId) {
+        console.log('>>> SHOWING SUCCESS SCREEN')
         return (
             <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
                 {/* Success Header */}

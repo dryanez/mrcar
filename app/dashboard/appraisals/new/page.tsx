@@ -104,12 +104,18 @@ export default function NewAppraisalPage() {
     const [completedAppraisalId, setCompletedAppraisalId] = useState<string | null>(null)
 
     const onSubmit = async (data: AppraisalFormData) => {
+        console.log('>>> onSubmit called! Current step:', currentStep)
+        console.log('>>> Form data:', data)
+        console.trace('>>> Call stack:')
+
         setSaving(true)
         try {
             const { createAppraisal } = await import('@/lib/actions/appraisal-actions')
             const result = await createAppraisal(data)
 
+            console.log('>>> Server result:', result)
             if (!result.success) {
+                console.error('>>> Server error:', result.error)
                 alert(`Error: ${result.error}`)
                 return
             }

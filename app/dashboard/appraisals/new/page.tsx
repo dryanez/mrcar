@@ -151,7 +151,10 @@ export default function NewAppraisalPage() {
         alert(`Please correct the following errors:\n${errorKeys.join('\n')}`)
     }
 
-    const nextStep = () => {
+    const nextStep = (e?: React.MouseEvent) => {
+        e?.preventDefault()
+        e?.stopPropagation()
+        console.log('>>> nextStep called, current:', currentStep, 'going to:', currentStep + 1)
         if (currentStep < STEPS.length) {
             setCurrentStep(currentStep + 1)
         }
@@ -654,7 +657,7 @@ export default function NewAppraisalPage() {
                         {currentStep < STEPS.length ? (
                             <button
                                 type="button"
-                                onClick={nextStep}
+                                onClick={(e) => nextStep(e)}
                                 className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/30 transition-all"
                             >
                                 Next

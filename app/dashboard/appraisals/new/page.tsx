@@ -265,7 +265,14 @@ export default function NewAppraisalPage() {
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
+            <form
+                onSubmit={handleSubmit(onSubmit, onInvalid)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && e.target instanceof HTMLInputElement) {
+                        e.preventDefault()
+                    }
+                }}
+            >
                 <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
                     {/* Step 1: Client Info */}
                     {currentStep === 1 && (

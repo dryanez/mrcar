@@ -63,7 +63,12 @@ export async function createAppraisal(data: AppraisalFormData) {
 
         if (error) {
             console.error('Supabase error:', error)
-            return { success: false, error: error.message }
+            console.error('Supabase error code:', error.code)
+            console.error('Supabase error message:', error.message)
+            console.error('Supabase error details:', error.details)
+            console.error('Supabase error hint:', error.hint)
+            console.error('Data attempted to insert:', JSON.stringify(dbData, null, 2))
+            return { success: false, error: `Database error: ${error.message} (code: ${error.code})` }
         }
 
         revalidatePath('/dashboard/appraisals')

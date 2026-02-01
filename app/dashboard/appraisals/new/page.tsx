@@ -8,6 +8,7 @@ import { appraisalSchema, type AppraisalFormData } from '@/lib/validations/appra
 import { getBrands, getModels, getVersions } from '@/lib/data/vehicles'
 import { getRegions, getComunas } from '@/lib/data/geo-chile'
 import PriceSuggestions from '@/components/PriceSuggestions'
+import PhotoCapture from '@/components/PhotoCapture'
 import {
     User,
     Car,
@@ -99,6 +100,9 @@ export default function NewAppraisalPage() {
     const vehicleModelo = watch('vehicleModelo')
     const vehicleAño = watch('vehicleAño')
 
+    const [showPhotoCapture, setShowPhotoCapture] = useState(false)
+    const [completedAppraisalId, setCompletedAppraisalId] = useState<string | null>(null)
+
     const onSubmit = async (data: AppraisalFormData) => {
         setSaving(true)
         try {
@@ -110,7 +114,9 @@ export default function NewAppraisalPage() {
                 return
             }
 
-            router.push('/dashboard/appraisals')
+            // Set success state instead of immediate redirect
+            setCompletedAppraisalId(result.data.id)
+            setShowPhotoCapture(true)
         } catch (error) {
             console.error('Error saving appraisal:', error)
             alert('Error saving appraisal. Please try again.')
@@ -155,6 +161,44 @@ export default function NewAppraisalPage() {
         const newNeumaticos = [...neumaticos]
         newNeumaticos[index] = !newNeumaticos[index]
         setValue('neumaticos', newNeumaticos)
+    }
+
+    // Success screen after form submission
+    if (showPhotoCapture && completedAppraisalId) {
+        return (
+            <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
+                {/* Success Header */}
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-2 border-green-200 dark:border-green-800 rounded-2xl p-8 text-center">
+                    <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                        <CheckCircle2 className="w-10 h-10 text-white" />
+                    </div>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                        Appraisal Completed!
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-400">
+                        The appraisal has been saved successfully.
+                    </p>
+                </div>
+
+                {/* Photo Capture Card */}
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+                    <PhotoCapture
+                        appraisalId={completedAppraisalId}
+                        onComplete={() => router.push('/dashboard/appraisals')}
+                    />
+
+                    {/* Skip Button */}
+                    <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800">
+                        <button
+                            onClick={() => router.push('/dashboard/appraisals')}
+                            className="w-full flex items-center justify-center gap-2 px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        >
+                            Skip for Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     return (

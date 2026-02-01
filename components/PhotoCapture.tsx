@@ -67,6 +67,9 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                 <p className="text-gray-600 dark:text-gray-400">
                     Take high-quality photos of the vehicle for this appraisal
                 </p>
+                <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">
+                    📱 Note: Camera opens automatically on mobile devices. On desktop, you can upload photos from your computer.
+                </p>
             </div>
 
             {/* Upload Button */}

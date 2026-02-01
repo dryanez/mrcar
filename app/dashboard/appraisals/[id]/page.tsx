@@ -17,13 +17,17 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
 
     const loadData = async () => {
         setLoading(true)
+        console.log('Loading appraisal:', params.id)
         const [appraisalResult, photosResult] = await Promise.all([
             getAppraisalById(params.id),
             getAppraisalPhotos(params.id),
         ])
 
+        console.log('Appraisal result:', appraisalResult)
         if (appraisalResult.success) {
             setAppraisal(appraisalResult.data)
+        } else {
+            console.error('Failed to load appraisal:', appraisalResult.error)
         }
 
         if (photosResult.success) {

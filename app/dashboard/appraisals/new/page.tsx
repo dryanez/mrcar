@@ -593,13 +593,6 @@ export default function NewAppraisalPage() {
                     </button>
 
                     <div className="flex gap-3">
-                        <button
-                            type="button"
-                            className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                        >
-                            <Save className="w-5 h-5" />
-                            Save Draft
-                        </button>
 
                         {currentStep < STEPS.length ? (
                             <button

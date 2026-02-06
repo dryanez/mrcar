@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, Trash2, X, ChevronLeft, ChevronRight } from 'lucide-react'
-import { deleteAppraisalPhoto } from '@/lib/actions/photo-actions'
+import { Download, Trash2, X, ChevronLeft, ChevronRight, DownloadCloud, Trash } from 'lucide-react'
+import { deleteAppraisalPhoto, deleteAllAppraisalPhotos } from '@/lib/actions/photo-actions'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
 
 interface Photo {
     id: string
@@ -20,6 +22,54 @@ interface PhotoGalleryProps {
 export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: PhotoGalleryProps) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
     const [deleting, setDeleting] = useState<string | null>(null)
+    const [downloadingAll, setDownloadingAll] = useState(false)
+    const [deletingAll, setDeletingAll] = useState(false)
+
+    const handleDownloadAll = async () => {
+        if (photos.length === 0) return
+
+        setDownloadingAll(true)
+        try {
+            const zip = new JSZip()
+
+            // Fetch and add all photos to ZIP
+            await Promise.all(
+                photos.map(async (photo, index) => {
+                    try {
+                        const response = await fetch(photo.publicUrl)
+                        const blob = await response.blob()
+                        const fileName = photo.file_name || `photo-${index + 1}.jpg`
+                        zip.file(fileName, blob)
+                    } catch (error) {
+                        console.error(`Failed to fetch ${photo.file_name}:`, error)
+                    }
+                })
+            )
+
+            // Generate and download ZIP
+            const zipBlob = await zip.generateAsync({ type: 'blob' })
+            saveAs(zipBlob, `appraisal-${appraisalId}-photos.zip`)
+        } catch (error) {
+            console.error('Failed to create ZIP:', error)
+            alert('Failed to download photos')
+        } finally {
+            setDownloadingAll(false)
+        }
+    }
+
+    const handleDeleteAll = async () => {
+        if (!confirm(`Are you sure you want to delete ALL ${photos.length} photos? This cannot be undone!`)) return
+
+        setDeletingAll(true)
+        const result = await deleteAllAppraisalPhotos(appraisalId)
+        setDeletingAll(false)
+
+        if (result.success) {
+            onPhotoDeleted?.()
+        } else {
+            alert(`Failed to delete photos: ${result.error}`)
+        }
+    }
 
     const handleDownload = async (photo: Photo) => {
         try {
@@ -84,6 +134,46 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
 
     return (
         <>
+            {/* Bulk Actions */}
+            {photos.length > 0 && (
+                <div className="flex gap-3 mb-6">
+                    <button
+                        onClick={handleDownloadAll}
+                        disabled={downloadingAll}
+                        className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {downloadingAll ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                Downloading...
+                            </>
+                        ) : (
+                            <>
+                                <DownloadCloud className="w-5 h-5" />
+                                Download All ({photos.length})
+                            </>
+                        )}
+                    </button>
+                    <button
+                        onClick={handleDeleteAll}
+                        disabled={deletingAll}
+                        className="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg shadow-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {deletingAll ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                Deleting...
+                            </>
+                        ) : (
+                            <>
+                                <Trash className="w-5 h-5" />
+                                Delete All ({photos.length})
+                            </>
+                        )}
+                    </button>
+                </div>
+            )}
+
             {/* Gallery Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {photos.map((photo, idx) => (

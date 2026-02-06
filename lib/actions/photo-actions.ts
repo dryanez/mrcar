@@ -161,3 +161,50 @@ export async function deleteAppraisalPhoto(photoId: string) {
         return { success: false, error: 'Failed to delete photo' }
     }
 }
+
+export async function deleteAllAppraisalPhotos(appraisalId: string) {
+    try {
+        const supabase = await createClient()
+
+        // Get all photos for this appraisal
+        const { data: photos, error: fetchError } = await supabase
+            .from('appraisal_photos')
+            .select('*')
+            .eq('appraisal_id', appraisalId)
+
+        if (fetchError) {
+            return { success: false, error: fetchError.message }
+        }
+
+        if (!photos || photos.length === 0) {
+            return { success: true, message: 'No photos to delete' }
+        }
+
+        // Delete all from storage
+        const storagePaths = photos.map(p => p.storage_path)
+        const { error: storageError } = await supabase.storage
+            .from('appraisal-photos')
+            .remove(storagePaths)
+
+        if (storageError) {
+            console.error('Storage delete error:', storageError)
+        }
+
+        // Delete all from database
+        const { error: dbError } = await supabase
+            .from('appraisal_photos')
+            .delete()
+            .eq('appraisal_id', appraisalId)
+
+        if (dbError) {
+            console.error('Database delete error:', dbError)
+            return { success: false, error: dbError.message }
+        }
+
+        revalidatePath(`/dashboard/appraisals/${appraisalId}`)
+        return { success: true, message: `Deleted ${photos.length} photos` }
+    } catch (error) {
+        console.error('Error deleting all photos:', error)
+        return { success: false, error: 'Failed to delete all photos' }
+    }
+}

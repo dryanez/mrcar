@@ -103,7 +103,7 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                 <input
                     id="photo-input"
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png,image/heic,image/webp"
                     capture="environment"
                     multiple
                     onChange={handleFileSelect}
@@ -122,7 +122,7 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                 <input
                     id="gallery-input"
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png,image/heic,image/webp"
                     multiple
                     onChange={handleFileSelect}
                     disabled={uploading}

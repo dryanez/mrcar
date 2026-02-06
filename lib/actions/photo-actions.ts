@@ -22,11 +22,12 @@ export async function uploadAppraisalPhoto(
         const fileName = `${timestamp}_${randomStr}.${fileExt}`
         const storagePath = `${appraisalId}/${fileName}`
 
-        // Upload to Supabase Storage
+        // Upload to Supabase Storage - preserve original quality
         const { data: uploadData, error: uploadError } = await supabase.storage
             .from('appraisal-photos')
             .upload(storagePath, file, {
                 contentType: file.type,
+                cacheControl: '3600',
                 upsert: false,
             })
 

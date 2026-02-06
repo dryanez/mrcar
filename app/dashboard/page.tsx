@@ -2,15 +2,20 @@ import Sidebar from '@/components/layout/Sidebar'
 import Link from 'next/link'
 import { FileText, Car, TrendingUp, Plus, Clock, CheckCircle2 } from 'lucide-react'
 
-export default function DashboardPage() {
-    // Mock data - will be replaced with real Supabase queries
+import { getAppraisals } from '@/lib/actions/appraisal-actions'
+
+export default async function DashboardPage() {
+    // Fetch real data from Supabase
+    const result = await getAppraisals()
+    const appraisals = result.data || []
+
     const stats = {
-        totalAppraisals: 0,
-        pendingAppraisals: 0,
-        completedAppraisals: 0,
+        totalAppraisals: appraisals.length,
+        pendingAppraisals: appraisals.filter((a: any) => a.status === 'draft' || a.status === 'pending').length,
+        completedAppraisals: appraisals.filter((a: any) => a.status === 'completed').length,
     }
 
-    const recentAppraisals = []
+    const recentAppraisals = appraisals.slice(0, 5) // Show 5 most recent
 
     return (
         <div className="space-y-8 animate-fade-in">
@@ -91,7 +96,39 @@ export default function DashboardPage() {
                     </div>
                 ) : (
                     <div className="space-y-4">
-                        {/* Appraisal list will go here */}
+                        {recentAppraisals.map((appraisal: any) => (
+                            <Link
+                                key={appraisal.id}
+                                href={`/dashboard/appraisals/${appraisal.id}`}
+                                className="block p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-white dark:hover:bg-gray-800 hover:shadow-md transition-all"
+                            >
+                                <div className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-3 mb-2">
+                                            <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                                <Car className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-semibold text-gray-900 dark:text-white">
+                                                    {appraisal.client_nombre} {appraisal.client_apellido}
+                                                </h3>
+                                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                                    {appraisal.vehicle_marca} {appraisal.vehicle_modelo} {appraisal.vehicle_ano}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${appraisal.status === 'completed'
+                                                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                                : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                            }`}>
+                                            {appraisal.status || 'draft'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
                 )}
             </div>

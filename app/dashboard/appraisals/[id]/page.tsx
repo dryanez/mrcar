@@ -13,10 +13,12 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
     const [appraisal, setAppraisal] = useState<any>(null)
     const [photos, setPhotos] = useState<any[]>([])
     const [loading, setLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
     const [showPhotoCapture, setShowPhotoCapture] = useState(false)
 
     const loadData = async () => {
         setLoading(true)
+        setError(null)
         console.log('Loading appraisal:', params.id)
         const [appraisalResult, photosResult] = await Promise.all([
             getAppraisalById(params.id),
@@ -28,6 +30,7 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
             setAppraisal(appraisalResult.data)
         } else {
             console.error('Failed to load appraisal:', appraisalResult.error)
+            setError(appraisalResult.error || 'Unknown error')
         }
 
         if (photosResult.success) {
@@ -52,7 +55,17 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
     if (!appraisal) {
         return (
             <div className="text-center py-12">
-                <p className="text-gray-500">Appraisal not found</p>
+                <p className="text-red-500 text-xl mb-4">Appraisal not found</p>
+                {error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 max-w-2xl mx-auto">
+                        <p className="text-red-700 dark:text-red-400 font-mono text-sm">
+                            Error: {error}
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
+                            Appraisal ID: {params.id}
+                        </p>
+                    </div>
+                )}
             </div>
         )
     }

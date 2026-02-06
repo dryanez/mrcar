@@ -15,6 +15,18 @@ export async function uploadAppraisalPhoto(
             return { success: false, error: 'No file provided' }
         }
 
+        // Check file size (max 20MB)
+        const maxSize = 20 * 1024 * 1024 // 20MB in bytes
+        if (file.size > maxSize) {
+            return { success: false, error: `File too large. Maximum size is 20MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB` }
+        }
+
+        console.log('[Photo Upload] File info:', {
+            name: file.name,
+            size: `${(file.size / 1024 / 1024).toFixed(2)}MB`,
+            type: file.type
+        })
+
         // Generate unique filename
         const timestamp = Date.now()
         const randomStr = Math.random().toString(36).substring(7)

@@ -13,12 +13,14 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
     const [uploading, setUploading] = useState(false)
     const [uploadedCount, setUploadedCount] = useState(0)
     const [previews, setPreviews] = useState<string[]>([])
+    const [error, setError] = useState<string | null>(null)
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || [])
         if (files.length === 0) return
 
         setUploading(true)
+        setError(null)
 
         // Create previews
         const newPreviews = await Promise.all(
@@ -34,20 +36,37 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
 
         // Upload files
         let successCount = 0
+        let errorMessages: string[] = []
+
         for (const file of files) {
             const formData = new FormData()
             formData.append('file', file)
 
-            const result = await uploadAppraisalPhoto(appraisalId, formData)
-            if (result.success) {
-                successCount++
-                setUploadedCount(successCount)
+            try {
+                console.log('Uploading file:', file.name, 'Size:', file.size)
+                const result = await uploadAppraisalPhoto(appraisalId, formData)
+                console.log('Upload result:', result)
+
+                if (result.success) {
+                    successCount++
+                    setUploadedCount(successCount)
+                } else {
+                    console.error('Upload failed:', result.error)
+                    errorMessages.push(`${file.name}: ${result.error}`)
+                }
+            } catch (err) {
+                console.error('Upload exception:', err)
+                errorMessages.push(`${file.name}: ${err instanceof Error ? err.message : 'Unknown error'}`)
             }
         }
 
         setUploading(false)
 
-        // Auto-complete after 1 second
+        if (errorMessages.length > 0) {
+            setError(`Failed to upload ${errorMessages.length} photo(s):\n${errorMessages.join('\n')}`)
+        }
+
+        // Auto-complete after 1 second if at least one succeeded
         if (onComplete && successCount > 0) {
             setTimeout(() => {
                 onComplete()
@@ -134,6 +153,15 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                             Successfully uploaded {uploadedCount} photo{uploadedCount !== 1 ? 's' : ''}!
                         </p>
                     </div>
+                </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4">
+                    <p className="text-red-700 dark:text-red-400 font-medium whitespace-pre-wrap">
+                        {error}
+                    </p>
                 </div>
             )}
 

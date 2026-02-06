@@ -8,7 +8,13 @@ import { getAppraisalPhotos } from '@/lib/actions/photo-actions'
 import PhotoGallery from '@/components/PhotoGallery'
 import PhotoCapture from '@/components/PhotoCapture'
 
-export default function AppraisalDetailPage({ params }: { params: { id: string } }) {
+export default async function AppraisalDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params
+
+    return <AppraisalDetailContent appraisalId={id} />
+}
+
+function AppraisalDetailContent({ appraisalId }: { appraisalId: string }) {
     const router = useRouter()
     const [appraisal, setAppraisal] = useState<any>(null)
     const [photos, setPhotos] = useState<any[]>([])
@@ -19,10 +25,10 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
     const loadData = async () => {
         setLoading(true)
         setError(null)
-        console.log('Loading appraisal:', params.id)
+        console.log('Loading appraisal:', appraisalId)
         const [appraisalResult, photosResult] = await Promise.all([
-            getAppraisalById(params.id),
-            getAppraisalPhotos(params.id),
+            getAppraisalById(appraisalId),
+            getAppraisalPhotos(appraisalId),
         ])
 
         console.log('Appraisal result:', appraisalResult)
@@ -42,7 +48,7 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
 
     useEffect(() => {
         loadData()
-    }, [params.id])
+    }, [appraisalId])
 
     if (loading) {
         return (
@@ -62,7 +68,7 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
                             Error: {error}
                         </p>
                         <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
-                            Appraisal ID: {params.id}
+                            Appraisal ID: {appraisalId}
                         </p>
                     </div>
                 )}
@@ -102,7 +108,7 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
             {showPhotoCapture && (
                 <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
                     <PhotoCapture
-                        appraisalId={params.id}
+                        appraisalId={appraisalId}
                         onComplete={() => {
                             setShowPhotoCapture(false)
                             loadData() // Refresh photos
@@ -118,7 +124,7 @@ export default function AppraisalDetailPage({ params }: { params: { id: string }
                 </h2>
                 <PhotoGallery
                     photos={photos}
-                    appraisalId={params.id}
+                    appraisalId={appraisalId}
                     onPhotoDeleted={loadData}
                 />
             </div>

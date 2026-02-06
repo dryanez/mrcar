@@ -119,7 +119,8 @@ export default function NewAppraisalPage() {
             console.log('>>> Server result:', result)
             if (!result.success) {
                 console.error('>>> Server error:', result.error)
-                alert(`Error: ${result.error}`)
+                // Show detailed error to user
+                alert(`Failed to save appraisal:\n\n${result.error}\n\nPlease screenshot this message and send it.`)
                 return
             }
 

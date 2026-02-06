@@ -6,53 +6,61 @@ import type { AppraisalFormData } from '@/lib/validations/appraisal'
 
 export async function createAppraisal(data: AppraisalFormData) {
     try {
+        console.log('[Server] createAppraisal called with data:', data)
         const supabase = await createClient()
 
         // Map camelCase form fields to snake_case database columns
-        const dbData = {
-            // Client Info
-            client_nombre: data.clientNombre,
-            client_apellido: data.clientApellido,
-            client_email: data.clientEmail || null,
-            client_telefono: data.clientTelefono,
-            client_rut: data.clientRut,
-            client_direccion: data.clientDireccion || null,
-            client_comuna: data.clientComuna || null,
+        let dbData
+        try {
+            dbData = {
+                // Client Info
+                client_nombre: data.clientNombre,
+                client_apellido: data.clientApellido,
+                client_email: data.clientEmail || null,
+                client_telefono: data.clientTelefono,
+                client_rut: data.clientRut,
+                client_direccion: data.clientDireccion || null,
+                client_comuna: data.clientComuna || null,
 
-            // Vehicle Info
-            vehicle_marca: data.vehicleMarca,
-            vehicle_modelo: data.vehicleModelo,
-            vehicle_version: data.vehicleVersion || null,
-            vehicle_ano: data.vehicleAño,
-            vehicle_color: data.vehicleColor || null,
-            vehicle_km: data.vehicleKm,
-            vehicle_motor: data.vehicleMotor || null,
-            vehicle_patente: data.vehiclePatente,
-            vehicle_transmision: data.vehicleTransmision,
-            vehicle_combustible: data.vehicleCombustible,
+                // Vehicle Info
+                vehicle_marca: data.vehicleMarca,
+                vehicle_modelo: data.vehicleModelo,
+                vehicle_version: data.vehicleVersion || null,
+                vehicle_ano: data.vehicleAño,
+                vehicle_color: data.vehicleColor || null,
+                vehicle_km: data.vehicleKm,
+                vehicle_motor: data.vehicleMotor || null,
+                vehicle_patente: data.vehiclePatente,
+                vehicle_transmision: data.vehicleTransmision,
+                vehicle_combustible: data.vehicleCombustible,
 
-            // Documentation
-            permiso_circulacion: data.permisoCirculacion,
-            vence_permiso: data.vencePermiso || null,
-            revision_tecnica: data.revisionTecnica,
-            vence_revision: data.venceRevision || null,
-            soap: data.soap,
-            seguro: data.seguro,
-            num_duenos: data.numDueños || null,
-            tasacion: data.tasacion || null,
-            en_prenda: data.enPrenda,
+                // Documentation
+                permiso_circulacion: data.permisoCirculacion,
+                vence_permiso: data.vencePermiso || null,
+                revision_tecnica: data.revisionTecnica,
+                vence_revision: data.venceRevision || null,
+                soap: data.soap,
+                seguro: data.seguro,
+                num_duenos: data.numDueños || null,
+                tasacion: data.tasacion || null,
+                en_prenda: data.enPrenda,
 
-            // Features
-            features: data.features,
+                // Features
+                features: data.features,
 
-            // Technical
-            airbags: data.airbags || null,
-            num_llaves: data.numLlaves,
-            neumaticos: data.neumaticos,
-            observaciones: data.observaciones || null,
+                // Technical
+                airbags: data.airbags || null,
+                num_llaves: data.numLlaves,
+                neumaticos: data.neumaticos,
+                observaciones: data.observaciones || null,
 
-            // Status
-            status: 'draft',
+                // Status
+                status: 'draft',
+            }
+            console.log('[Server] Mapped dbData:', JSON.stringify(dbData, null, 2))
+        } catch (mappingError) {
+            console.error('[Server] Error mapping data:', mappingError)
+            return { success: false, error: `Data mapping error: ${mappingError instanceof Error ? mappingError.message : String(mappingError)}` }
         }
 
         const { data: appraisal, error } = await supabase
@@ -75,7 +83,10 @@ export async function createAppraisal(data: AppraisalFormData) {
         return { success: true, data: appraisal }
     } catch (error) {
         console.error('Error creating appraisal:', error)
-        return { success: false, error: 'Failed to create appraisal' }
+        const errorMessage = error instanceof Error ? error.message : String(error)
+        const errorStack = error instanceof Error ? error.stack : 'No stack trace'
+        console.error('Error stack:', errorStack)
+        return { success: false, error: `Server error: ${errorMessage}` }
     }
 }
 

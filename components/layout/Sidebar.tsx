@@ -11,13 +11,15 @@ import {
     Settings,
     Menu,
     X,
-    ChevronLeft
+    ChevronLeft,
+    Shield
 } from 'lucide-react'
 
 const navigation = [
     { name: 'Panel', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Tasaciones', href: '/dashboard/appraisals', icon: FileText },
     { name: 'Nueva Tasación', href: '/dashboard/appraisals/new', icon: Car },
+    { name: 'Admin', href: '/admin/dashboard', icon: Shield, admin: true },
     { name: 'Configuración', href: '/dashboard/settings', icon: Settings },
 ]
 
@@ -82,28 +84,39 @@ export default function Sidebar() {
                         {navigation.map((item) => {
                             const isActive = pathname === item.href
                             const Icon = item.icon
+                            const isAdmin = item.admin
 
                             return (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setMobileOpen(false)}
-                                    className={`
+                                <div key={item.name}>
+                                    {/* Add divider before admin */}
+                                    {isAdmin && (
+                                        <div className="my-2 border-t border-gray-200 dark:border-gray-700" />
+                                    )}
+                                    <Link
+                                        href={item.href}
+                                        onClick={() => setMobileOpen(false)}
+                                        className={`
                     flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
                     ${isActive
-                                            ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shadow-sm'
-                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
-                                        }
+                                                ? isAdmin
+                                                    ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 shadow-sm'
+                                                    : 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shadow-sm'
+                                                : isAdmin
+                                                    ? 'text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20'
+                                                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                                            }
                     ${collapsed ? 'justify-center' : ''}
                   `}
-                                    title={collapsed ? item.name : ''}
-                                >
-                                    <Icon className="w-5 h-5 flex-shrink-0" />
-                                    {!collapsed && <span className="font-medium">{item.name}</span>}
-                                    {!collapsed && isActive && (
-                                        <div className="ml-auto w-2 h-2 bg-blue-600 rounded-full" />
-                                    )}
-                                </Link>
+                                        title={collapsed ? item.name : ''}
+                                    >
+                                        <Icon className={`w-5 h-5 flex-shrink-0 ${isAdmin && !isActive ? 'animate-pulse' : ''}`} />
+                                        {!collapsed && <span className="font-medium">{item.name}</span>}
+                                        {!collapsed && isActive && (
+                                            <div className={`ml-auto w-2 h-2 rounded-full ${isAdmin ? 'bg-purple-600' : 'bg-blue-600'
+                                                }`} />
+                                        )}
+                                    </Link>
+                                </div>
                             )
                         })}
                     </nav>

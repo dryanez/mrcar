@@ -72,6 +72,58 @@ export default async function AdminLayout({
                 </div>
             </nav>
 
+            {/* Quick Navigation Cards */}
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 border-b border-gray-200 dark:border-gray-800">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <Link
+                            href="/admin/dashboard"
+                            className="group bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 rounded-xl p-4 transition-all hover:scale-[1.02] hover:shadow-lg"
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                                    <LayoutDashboard className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-white font-semibold">Dashboard</h3>
+                                    <p className="text-white/80 text-sm">Resumen general</p>
+                                </div>
+                            </div>
+                        </Link>
+
+                        <Link
+                            href="/admin/users"
+                            className="group bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 rounded-xl p-4 transition-all hover:scale-[1.02] hover:shadow-lg"
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                                    <Users className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-white font-semibold">Usuarios</h3>
+                                    <p className="text-white/80 text-sm">Gestionar equipo</p>
+                                </div>
+                            </div>
+                        </Link>
+
+                        <Link
+                            href="/admin/analytics"
+                            className="group bg-white/10 backdrop-blur-sm hover:bg-white/20 border border-white/20 rounded-xl p-4 transition-all hover:scale-[1.02] hover:shadow-lg"
+                        >
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-white/20 rounded-lg group-hover:bg-white/30 transition-colors">
+                                    <BarChart3 className="w-6 h-6 text-white" />
+                                </div>
+                                <div>
+                                    <h3 className="text-white font-semibold">Analíticas</h3>
+                                    <p className="text-white/80 text-sm">Reportes y stats</p>
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {children}

@@ -136,7 +136,7 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                     <div className="flex items-center gap-3">
                         <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                         <p className="text-blue-700 dark:text-blue-400 font-medium">
-                            Uploading {uploadedCount} photo{uploadedCount !== 1 ? 's' : ''}...
+                            Subiendo {uploadedCount} photo{uploadedCount !== 1 ? 's' : ''}...
                         </p>
                     </div>
                 </div>
@@ -150,7 +150,7 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                             <Check className="w-5 h-5 text-white" />
                         </div>
                         <p className="text-green-700 dark:text-green-400 font-medium">
-                            Successfully uploaded {uploadedCount} photo{uploadedCount !== 1 ? 's' : ''}!
+                            Subido exitosamente {uploadedCount} photo{uploadedCount !== 1 ? 's' : ''}!
                         </p>
                     </div>
                 </div>

@@ -201,7 +201,7 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
         return (
             <div className="text-center py-12 bg-gray-50 dark:bg-gray-800/50 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700">
                 <p className="text-gray-500 dark:text-gray-400">
-                    No photos uploaded yet
+                    Aún no hay fotos subidas
                 </p>
             </div>
         )
@@ -254,7 +254,7 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
                         {deletingAll ? (
                             <>
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                Deleting...
+                                Eliminando...
                             </>
                         ) : (
                             <>
@@ -339,7 +339,7 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
                             {deleting === photos[selectedIndex].id ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Deleting...
+                                    Eliminando...
                                 </>
                             ) : (
                                 <>

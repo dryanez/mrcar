@@ -55,7 +55,7 @@ export async function createAppraisal(data: AppraisalFormData) {
                 observaciones: data.observaciones || null,
 
                 // Status
-                status: 'draft',
+                status: 'completed', // Mark as completed when form is submitted
             }
             console.log('[Server] Mapped dbData:', JSON.stringify(dbData, null, 2))
         } catch (mappingError) {

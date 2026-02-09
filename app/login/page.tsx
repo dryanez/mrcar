@@ -46,20 +46,17 @@ export default function LoginPage() {
             <div className="w-full max-w-md">
                 {/* Logo & Header */}
                 <div className="text-center mb-8">
-                    <div className="flex justify-center mb-6">
+                    <div className="flex justify-center mb-4">
                         <Image
                             src="/mrcar-logo.png"
                             alt="MrCar Logo"
-                            width={120}
-                            height={120}
+                            width={140}
+                            height={140}
                             className="drop-shadow-2xl"
                             priority
                         />
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-                        MrCar
-                    </h1>
-                    <p className="text-gray-400 text-sm md:text-base">Sistema de Tasaciones</p>
+                    <p className="text-gray-400 text-base md:text-lg">Sistema de Tasaciones</p>
                 </div>
 
                 {/* Login Card */}
@@ -87,7 +84,7 @@ export default function LoginPage() {
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
+                                    className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
                                     placeholder="tu.email@mrcar.cl"
                                 />
                             </div>
@@ -105,7 +102,7 @@ export default function LoginPage() {
                                     required
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
+                                    className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
                                     placeholder="••••••••"
                                 />
                             </div>

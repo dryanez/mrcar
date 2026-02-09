@@ -12,10 +12,10 @@ export default async function AppraisalsPage() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                        Appraisals
+                        Tasaciones
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Manage all vehicle appraisals
+                        Gestionar todas las tasaciones de vehículos
                     </p>
                 </div>
                 <Link
@@ -23,7 +23,7 @@ export default async function AppraisalsPage() {
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/30 transition-all"
                 >
                     <Plus className="w-5 h-5" />
-                    New Appraisal
+                    Nueva Tasación
                 </Link>
             </div>
 
@@ -34,13 +34,13 @@ export default async function AppraisalsPage() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                             type="text"
-                            placeholder="Search by client name, patente, or vehicle..."
+                            placeholder="Buscar por nombre de cliente, patente o vehículo..."
                             className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-400"
                         />
                     </div>
                     <button className="flex items-center gap-2 px-6 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300">
                         <Filter className="w-5 h-5" />
-                        Filter
+                        Filtrar
                     </button>
                 </div>
             </div>
@@ -53,10 +53,10 @@ export default async function AppraisalsPage() {
                             <Plus className="w-8 h-8 text-gray-400" />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                            No appraisals found
+                            No se encontraron tasaciones
                         </h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-6">
-                            Create your first appraisal to get started
+                            Crea tu primera tasación para comenzar
                         </p>
                         <Link
                             href="/dashboard/appraisals/new"
@@ -110,8 +110,8 @@ export default async function AppraisalsPage() {
                                                 {new Date(appraisal.created_at).toLocaleDateString()}
                                             </div>
                                             <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full mt-2 ${appraisal.status === 'draft'
-                                                    ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
-                                                    : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                                ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                                : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                                                 }`}>
                                                 {appraisal.status || 'draft'}
                                             </span>

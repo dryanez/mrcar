@@ -220,12 +220,12 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
                         {blurring ? (
                             <>
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                Blurring {blurProgress.current}/{blurProgress.total}...
+                                Difuminando {blurProgress.current}/{blurProgress.total}...
                             </>
                         ) : (
                             <>
                                 <Sparkles className="w-5 h-5" />
-                                Auto-Blur Sensitive Content
+                                Difuminar Contenido Sensible
                             </>
                         )}
                     </button>
@@ -237,12 +237,12 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
                         {downloadingAll ? (
                             <>
                                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                Downloading...
+                                Descargando...
                             </>
                         ) : (
                             <>
                                 <DownloadCloud className="w-5 h-5" />
-                                Download All ({photos.length})
+                                Descargar Todas ({photos.length})
                             </>
                         )}
                     </button>
@@ -259,7 +259,7 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
                         ) : (
                             <>
                                 <Trash className="w-5 h-5" />
-                                Delete All ({photos.length})
+                                Eliminar Todas ({photos.length})
                             </>
                         )}
                     </button>

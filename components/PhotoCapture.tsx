@@ -81,13 +81,13 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                     <Camera className="w-10 h-10 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    Capture Vehicle Photos
+                    Capturar Fotos del Vehículo
                 </h2>
                 <p className="text-gray-600 dark:text-gray-400">
-                    Take high-quality photos of the vehicle for this appraisal
+                    Tome fotos de alta calidad del vehículo para esta tasación
                 </p>
                 <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">
-                    📱 Note: Camera opens automatically on mobile devices. On desktop, you can upload photos from your computer.
+                    📱 Nota: La cámara se abre automáticamente en dispositivos móviles. En escritorio, puede subir fotos desde su computadora.
                 </p>
             </div>
 
@@ -98,7 +98,7 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                     className="flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg shadow-blue-500/30 transition-all cursor-pointer"
                 >
                     <Camera className="w-6 h-6" />
-                    {uploading ? 'Uploading...' : 'Open Camera'}
+                    {uploading ? 'Subiendo...' : 'Abrir Cámara'}
                 </label>
                 <input
                     id="photo-input"
@@ -117,7 +117,7 @@ export default function PhotoCapture({ appraisalId, onComplete }: PhotoCapturePr
                     className="flex items-center justify-center gap-3 px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all cursor-pointer"
                 >
                     <Upload className="w-6 h-6" />
-                    Upload from Gallery
+                    Subir desde Galería
                 </label>
                 <input
                     id="gallery-input"

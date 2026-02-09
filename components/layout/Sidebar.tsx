@@ -15,10 +15,10 @@ import {
 } from 'lucide-react'
 
 const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Appraisals', href: '/dashboard/appraisals', icon: FileText },
-    { name: 'New Appraisal', href: '/dashboard/appraisals/new', icon: Car },
-    { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+    { name: 'Panel', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Tasaciones', href: '/dashboard/appraisals', icon: FileText },
+    { name: 'Nueva Tasación', href: '/dashboard/appraisals/new', icon: Car },
+    { name: 'Configuración', href: '/dashboard/settings', icon: Settings },
 ]
 
 export default function Sidebar() {

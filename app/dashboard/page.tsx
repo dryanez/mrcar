@@ -45,21 +45,18 @@ export default async function DashboardPage() {
                     value={stats.totalAppraisals}
                     icon={FileText}
                     color="blue"
-                    trend="+12%"
                 />
                 <StatCard
                     title="Pendientes"
                     value={stats.pendingAppraisals}
                     icon={Clock}
                     color="yellow"
-                    trend="+5%"
                 />
                 <StatCard
                     title="Completadas"
                     value={stats.completedAppraisals}
                     icon={CheckCircle2}
                     color="green"
-                    trend="+18%"
                 />
             </div>
 
@@ -165,7 +162,7 @@ function StatCard({
     value: number
     icon: any
     color: 'blue' | 'yellow' | 'green'
-    trend: string
+    trend?: string
 }) {
     const colorClasses = {
         blue: 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
@@ -179,10 +176,12 @@ function StatCard({
                 <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
                     <Icon className="w-6 h-6" />
                 </div>
-                <span className="text-sm font-semibold text-green-600 dark:text-green-400 flex items-center gap-1">
-                    <TrendingUp className="w-4 h-4" />
-                    {trend}
-                </span>
+                {trend && (
+                    <span className="text-sm font-semibold text-green-600 dark:text-green-400 flex items-center gap-1">
+                        <TrendingUp className="w-4 h-4" />
+                        {trend}
+                    </span>
+                )}
             </div>
             <h3 className="text-gray-600 dark:text-gray-400 text-sm font-medium mb-1">
                 {title}

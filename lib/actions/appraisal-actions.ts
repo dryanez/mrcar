@@ -3,11 +3,21 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { AppraisalFormData } from '@/lib/validations/appraisal'
+import { getCurrentUser } from './auth-actions'
 
 export async function createAppraisal(data: AppraisalFormData) {
     try {
         console.log('[Server] createAppraisal called with data:', data)
         const supabase = await createClient()
+
+        // Get current user for tracking
+        const currentUser = await getCurrentUser()
+        if (!currentUser) {
+            return {
+                success: false,
+                error: 'No autenticado. Por favor, inicia sesión.'
+            }
+        }
 
         // Map camelCase form fields to snake_case database columns
         let dbData
@@ -53,6 +63,10 @@ export async function createAppraisal(data: AppraisalFormData) {
                 num_llaves: data.numLlaves,
                 neumaticos: data.neumaticos,
                 observaciones: data.observaciones || null,
+
+                // User Tracking
+                created_by_user_id: currentUser.id,
+                sucursal: currentUser.sucursal,
 
                 // Status
                 status: 'completed', // Mark as completed when form is submitted

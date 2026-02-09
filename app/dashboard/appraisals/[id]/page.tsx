@@ -7,6 +7,7 @@ import { getAppraisalById } from '@/lib/actions/appraisal-actions'
 import { getAppraisalPhotos } from '@/lib/actions/photo-actions'
 import PhotoGallery from '@/components/PhotoGallery'
 import PhotoCapture from '@/components/PhotoCapture'
+import DownloadPDFButton from '@/components/DownloadPDFButton'
 
 export default async function AppraisalDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params

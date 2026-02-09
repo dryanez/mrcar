@@ -3,7 +3,8 @@
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { login } from '@/lib/actions/auth-actions'
-import { Car, Lock, Mail } from 'lucide-react'
+import { Lock, Mail } from 'lucide-react'
+import Image from 'next/image'
 
 export default function LoginPage() {
     const router = useRouter()
@@ -40,25 +41,35 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
+            {/* Main Container */}
             <div className="w-full max-w-md">
-                {/* Logo/Header */}
+                {/* Logo & Header */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 shadow-lg">
-                        <Car className="w-8 h-8 text-blue-600" />
+                    <div className="flex justify-center mb-6">
+                        <Image
+                            src="/mrcar-logo.png"
+                            alt="MrCar Logo"
+                            width={120}
+                            height={120}
+                            className="drop-shadow-2xl"
+                            priority
+                        />
                     </div>
-                    <h1 className="text-4xl font-bold text-white mb-2">MrCar</h1>
-                    <p className="text-blue-100">Sistema de Tasaciones</p>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
+                        MrCar
+                    </h1>
+                    <p className="text-gray-400 text-sm md:text-base">Sistema de Tasaciones</p>
                 </div>
 
                 {/* Login Card */}
-                <div className="bg-white rounded-2xl shadow-2xl p-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 p-6 md:p-8">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">
                         Iniciar Sesión
                     </h2>
 
                     {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+                        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6 text-sm md:text-base">
                             {error}
                         </div>
                     )}
@@ -66,17 +77,17 @@ export default function LoginPage() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Email */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Email
                             </label>
                             <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                                 <input
                                     type="email"
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                    className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
                                     placeholder="tu.email@mrcar.cl"
                                 />
                             </div>
@@ -84,17 +95,17 @@ export default function LoginPage() {
 
                         {/* Password */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Contraseña
                             </label>
                             <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                                 <input
                                     type="password"
                                     required
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                    className="w-full pl-11 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
                                     placeholder="••••••••"
                                 />
                             </div>
@@ -104,11 +115,11 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-gray-900 dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-gray-900 font-semibold py-3 md:py-4 px-4 rounded-lg shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base md:text-lg mt-6"
                         >
                             {loading ? (
                                 <span className="flex items-center justify-center gap-2">
-                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <div className="w-5 h-5 border-2 border-white/30 dark:border-gray-900/30 border-t-white dark:border-t-gray-900 rounded-full animate-spin" />
                                     Iniciando sesión...
                                 </span>
                             ) : (
@@ -118,18 +129,24 @@ export default function LoginPage() {
                     </form>
 
                     {/* Test Credentials */}
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                        <p className="text-xs text-gray-500 text-center mb-2">
+                    <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 text-center mb-2">
                             Credenciales de prueba:
                         </p>
-                        <div className="bg-gray-50 rounded-lg p-3 space-y-1">
-                            <p className="text-xs text-gray-600">
+                        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 space-y-1">
+                            <p className="text-xs text-gray-600 dark:text-gray-300 text-center">
                                 <strong>Admin:</strong> admin@mrcar.cl / admin
                             </p>
                         </div>
                     </div>
                 </div>
+
+                {/* Footer */}
+                <p className="text-center text-gray-500 text-xs mt-6">
+                    © {new Date().getFullYear()} MrCar - Sistema de Tasaciones
+                </p>
             </div>
         </div>
     )
 }
+

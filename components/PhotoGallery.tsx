@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, Trash2, X, ChevronLeft, ChevronRight, DownloadCloud, Trash } from 'lucide-react'
-import { deleteAppraisalPhoto, deleteAllAppraisalPhotos } from '@/lib/actions/photo-actions'
+import { Download, Trash2, X, ChevronLeft, ChevronRight, DownloadCloud, Trash, Sparkles } from 'lucide-react'
+import { deleteAppraisalPhoto, deleteAllAppraisalPhotos, uploadAppraisalPhoto } from '@/lib/actions/photo-actions'
+import { detectSensitiveContent } from '@/lib/actions/image-blur-actions'
+import { blurImageRegions } from '@/lib/utils/image-blur'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 
@@ -24,6 +26,8 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
     const [deleting, setDeleting] = useState<string | null>(null)
     const [downloadingAll, setDownloadingAll] = useState(false)
     const [deletingAll, setDeletingAll] = useState(false)
+    const [blurring, setBlurring] = useState(false)
+    const [blurProgress, setBlurProgress] = useState({ current: 0, total: 0 })
 
     const handleDownloadAll = async () => {
         if (photos.length === 0) return
@@ -136,10 +140,27 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
         <>
             {/* Bulk Actions */}
             {photos.length > 0 && (
-                <div className="flex gap-3 mb-6">
+                <div className="flex flex-wrap gap-3 mb-6">
+                    <button
+                        onClick={handleAutoBlur}
+                        disabled={blurring || downloadingAll || deletingAll}
+                        className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold rounded-lg shadow-lg shadow-purple-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {blurring ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                Blurring {blurProgress.current}/{blurProgress.total}...
+                            </>
+                        ) : (
+                            <>
+                                <Sparkles className="w-5 h-5" />
+                                Auto-Blur Sensitive Content
+                            </>
+                        )}
+                    </button>
                     <button
                         onClick={handleDownloadAll}
-                        disabled={downloadingAll}
+                        disabled={downloadingAll || blurring}
                         className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {downloadingAll ? (
@@ -156,7 +177,7 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
                     </button>
                     <button
                         onClick={handleDeleteAll}
-                        disabled={deletingAll}
+                        disabled={deletingAll || blurring}
                         className="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-lg shadow-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {deletingAll ? (

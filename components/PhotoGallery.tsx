@@ -75,6 +75,77 @@ export default function PhotoGallery({ photos, appraisalId, onPhotoDeleted }: Ph
         }
     }
 
+    const handleAutoBlur = async () => {
+        if (!confirm(`This will automatically blur license plates and people in ALL ${photos.length} photos. The original photos will be replaced. Continue?`)) return
+
+        setBlurring(true)
+        setBlurProgress({ current: 0, total: photos.length })
+
+        const processedPhotos: { blob: Blob; fileName: string; photoId: string }[] = []
+
+        try {
+            // Process each photo
+            for (let i = 0; i < photos.length; i++) {
+                const photo = photos[i]
+                setBlurProgress({ current: i + 1, total: photos.length })
+
+                try {
+                    // 1. Detect sensitive content
+                    console.log(`[Auto-Blur] Processing ${photo.file_name}...`)
+                    const detection = await detectSensitiveContent(photo.publicUrl)
+
+                    if (!detection.success || detection.detections.length === 0) {
+                        console.log(`[Auto-Blur] No sensitive content found in ${photo.file_name}`)
+                        continue
+                    }
+
+                    console.log(`[Auto-Blur] Found ${detection.detections.length} regions to blur`)
+
+                    // 2. Blur the regions
+                    const blurredBlob = await blurImageRegions(photo.publicUrl, detection.detections)
+
+                    // 3. Store for upload
+                    processedPhotos.push({
+                        blob: blurredBlob,
+                        fileName: photo.file_name,
+                        photoId: photo.id
+                    })
+                } catch (error) {
+                    console.error(`[Auto-Blur] Failed to process ${photo.file_name}:`, error)
+                }
+            }
+
+            if (processedPhotos.length === 0) {
+                alert('No license plates or people detected in any photos!')
+                return
+            }
+
+            // 4. Delete processed photos
+            console.log(`[Auto-Blur] Deleting ${processedPhotos.length} original photos...`)
+            for (const processed of processedPhotos) {
+                await deleteAppraisalPhoto(processed.photoId)
+            }
+
+            // 5. Upload blurred versions
+            console.log(`[Auto-Blur] Uploading ${processedPhotos.length} blurred photos...`)
+            for (const processed of processedPhotos) {
+                const formData = new FormData()
+                const file = new File([processed.blob], processed.fileName, { type: 'image/jpeg' })
+                formData.append('file', file)
+                await uploadAppraisalPhoto(appraisalId, formData)
+            }
+
+            alert(`Successfully blurred ${processedPhotos.length} photos!`)
+            onPhotoDeleted?.() // Refresh gallery
+        } catch (error) {
+            console.error('[Auto-Blur] Error:', error)
+            alert('Failed to process photos. Check console for details.')
+        } finally {
+            setBlurring(false)
+            setBlurProgress({ current: 0, total: 0 })
+        }
+    }
+
     const handleDownload = async (photo: Photo) => {
         try {
             const response = await fetch(photo.publicUrl)

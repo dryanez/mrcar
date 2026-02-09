@@ -58,7 +58,10 @@ export default async function AdminLayout({
                             <span className="text-sm text-gray-600 dark:text-gray-400">
                                 {user.nombre} {user.apellido}
                             </span>
-                            <form action={logout}>
+                            <form action={async () => {
+                                'use server'
+                                await logout()
+                            }}>
                                 <button
                                     type="submit"
                                     className="flex items-center gap-2 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"

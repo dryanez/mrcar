@@ -5,7 +5,7 @@ import { requireAdmin } from './auth-actions'
 import { Resend } from 'resend'
 import crypto from 'crypto'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
 export async function getAllUsers() {
     try {
@@ -61,39 +61,41 @@ export async function createUser(data: {
         }
 
         // Send welcome email
-        try {
-            await resend.emails.send({
-                from: 'MrCar <onboarding@resend.dev>', // Change to your domain
-                to: data.email,
-                subject: '¡Bienvenido a MrCar!',
-                html: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                        <h1 style="color: #2563eb;">¡Bienvenido a MrCar!</h1>
-                        <p>Hola ${data.nombre},</p>
-                        <p>Tu cuenta ha sido creada exitosamente. Aquí están tus credenciales de acceso:</p>
-                        
-                        <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                            <p><strong>Email:</strong> ${data.email}</p>
-                            <p><strong>Contraseña temporal:</strong> <code style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px;">${tempPassword}</code></p>
-                            <p><strong>Sucursal:</strong> ${data.sucursal}</p>
+        if (resend) {
+            try {
+                await resend.emails.send({
+                    from: 'MrCar <onboarding@resend.dev>', // Change to your domain
+                    to: data.email,
+                    subject: '¡Bienvenido a MrCar!',
+                    html: `
+                        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                            <h1 style="color: #2563eb;">¡Bienvenido a MrCar!</h1>
+                            <p>Hola ${data.nombre},</p>
+                            <p>Tu cuenta ha sido creada exitosamente. Aquí están tus credenciales de acceso:</p>
+                            
+                            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                                <p><strong>Email:</strong> ${data.email}</p>
+                                <p><strong>Contraseña temporal:</strong> <code style="background: #e5e7eb; padding: 2px 6px; border-radius: 4px;">${tempPassword}</code></p>
+                                <p><strong>Sucursal:</strong> ${data.sucursal}</p>
+                            </div>
+                            
+                            <p>Por favor, cambia tu contraseña después de iniciar sesión por primera vez.</p>
+                            
+                            <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/login" 
+                               style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px;">
+                                Iniciar Sesión
+                            </a>
+                            
+                            <p style="margin-top: 30px; color: #6b7280; font-size: 14px;">
+                                Si tienes alguna pregunta, contacta a tu administrador.
+                            </p>
                         </div>
-                        
-                        <p>Por favor, cambia tu contraseña después de iniciar sesión por primera vez.</p>
-                        
-                        <a href="${process.env.NEXT_PUBLIC_APP_URL}/login" 
-                           style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 20px;">
-                            Iniciar Sesión
-                        </a>
-                        
-                        <p style="margin-top: 30px; color: #6b7280; font-size: 14px;">
-                            Si tienes alguna pregunta, contacta a tu administrador.
-                        </p>
-                    </div>
-                `
-            })
-        } catch (emailError) {
-            console.error('[Users] Email send error:', emailError)
-            // Don't fail user creation if email fails
+                    `
+                })
+            } catch (emailError) {
+                console.error('[Users] Email send error:', emailError)
+                // Don't fail user creation if email fails
+            }
         }
 
         // Store temp password in user record (you might want to hash this)

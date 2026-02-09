@@ -23,10 +23,10 @@ export default async function DashboardPage() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                        Welcome to MrCar! 👋
+                        ¡Bienvenido a MrCar! 👋
                     </h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        Professional vehicle appraisal platform
+                        Plataforma profesional de tasación de vehículos
                     </p>
                 </div>
                 <Link
@@ -34,28 +34,28 @@ export default async function DashboardPage() {
                     className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/30 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                     <Plus className="w-5 h-5" />
-                    New Appraisal
+                    Nueva Tasación
                 </Link>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <StatCard
-                    title="Total Appraisals"
+                    title="Tasaciones Totales"
                     value={stats.totalAppraisals}
                     icon={FileText}
                     color="blue"
                     trend="+12%"
                 />
                 <StatCard
-                    title="Pending"
+                    title="Pendientes"
                     value={stats.pendingAppraisals}
                     icon={Clock}
                     color="yellow"
                     trend="+5%"
                 />
                 <StatCard
-                    title="Completed"
+                    title="Completadas"
                     value={stats.completedAppraisals}
                     icon={CheckCircle2}
                     color="green"
@@ -67,13 +67,13 @@ export default async function DashboardPage() {
             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                        Recent Appraisals
+                        Tasaciones Recientes
                     </h2>
                     <Link
                         href="/dashboard/appraisals"
                         className="text-blue-600 dark:text-blue-400 hover:underline text-sm font-medium"
                     >
-                        View all
+                        Ver todas
                     </Link>
                 </div>
 
@@ -81,17 +81,17 @@ export default async function DashboardPage() {
                     <div className="text-center py-12">
                         <Car className="w-16 h-16 text-gray-300 dark:text-gray-700 mx-auto mb-4" />
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                            No appraisals yet
+                            Aún no hay tasaciones
                         </h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-6">
-                            Get started by creating your first vehicle appraisal
+                            Comienza creando tu primera tasación de vehículo
                         </p>
                         <Link
                             href="/dashboard/appraisals/new"
                             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
                         >
                             <Plus className="w-5 h-5" />
-                            Create First Appraisal
+                            Crear Primera Tasación
                         </Link>
                     </div>
                 ) : (
@@ -120,8 +120,8 @@ export default async function DashboardPage() {
                                     </div>
                                     <div className="text-right">
                                         <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${appraisal.status === 'completed'
-                                                ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                                                : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                            : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
                                             }`}>
                                             {appraisal.status || 'draft'}
                                         </span>
@@ -136,15 +136,15 @@ export default async function DashboardPage() {
             {/* Quick Actions */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <QuickActionCard
-                    title="New Appraisal"
-                    description="Start a new vehicle evaluation"
+                    title="Nueva Tasación"
+                    description="Iniciar una nueva evaluación de vehículo"
                     icon={Car}
                     href="/dashboard/appraisals/new"
                     color="blue"
                 />
                 <QuickActionCard
-                    title="View All Appraisals"
-                    description="Browse and manage appraisals"
+                    title="Ver Todas las Tasaciones"
+                    description="Explorar y gestionar tasaciones"
                     icon={FileText}
                     href="/dashboard/appraisals"
                     color="green"

@@ -96,13 +96,16 @@ function AppraisalDetailContent({ appraisalId }: { appraisalId: string }) {
                         Appraisal for {appraisal.client_nombre} {appraisal.client_apellido}
                     </p>
                 </div>
-                <button
-                    onClick={() => setShowPhotoCapture(!showPhotoCapture)}
-                    className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                    <Camera className="w-5 h-5" />
-                    {photos.length === 0 ? 'Add Photos' : 'Add More Photos'}
-                </button>
+                <div className="flex gap-3">
+                    <DownloadPDFButton appraisalId={appraisalId} />
+                    <button
+                        onClick={() => setShowPhotoCapture(!showPhotoCapture)}
+                        className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                    >
+                        <Camera className="w-5 h-5" />
+                        {photos.length === 0 ? 'Add Photos' : 'Add More Photos'}
+                    </button>
+                </div>
             </div>
 
             {/* Photo Capture (if active) */}

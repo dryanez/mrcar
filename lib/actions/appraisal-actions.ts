@@ -108,10 +108,23 @@ export async function getAppraisals() {
     try {
         const supabase = await createClient()
 
-        const { data: appraisals, error } = await supabase
+        // Get current user
+        const currentUser = await getCurrentUser()
+        if (!currentUser) {
+            return { success: false, error: 'No autenticado', data: [] }
+        }
+
+        let query = supabase
             .from('appraisals')
             .select('*')
             .order('created_at', { ascending: false })
+
+        // Regular users only see their own appraisals
+        if (currentUser.role !== 'admin') {
+            query = query.eq('created_by_user_id', currentUser.id)
+        }
+
+        const { data: appraisals, error } = await query
 
         if (error) {
             console.error('Supabase error:', error)

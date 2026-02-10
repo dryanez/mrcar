@@ -77,9 +77,19 @@ export async function resetUserPassword(userId: string, newPassword: string) {
         const supabase = await createClient()
         const currentUser = await getCurrentUser()
 
-        if (!currentUser || currentUser.role !== 'admin') {
-            return { success: false, error: 'No autorizado' }
+        console.log('[resetUserPassword] Current user:', currentUser?.email, 'Role:', currentUser?.role)
+
+        if (!currentUser) {
+            console.error('[resetUserPassword] No current user found')
+            return { success: false, error: 'No autenticado. Por favor, inicia sesión nuevamente.' }
         }
+
+        if (currentUser.role !== 'admin') {
+            console.error('[resetUserPassword] User is not admin:', currentUser.email, currentUser.role)
+            return { success: false, error: 'Solo administradores pueden resetear contraseñas' }
+        }
+
+        console.log('[resetUserPassword] Updating password for user:', userId)
 
         // Update password_hash in database (plain text for now - use bcrypt in production)
         const { error } = await supabase
@@ -88,9 +98,11 @@ export async function resetUserPassword(userId: string, newPassword: string) {
             .eq('id', userId)
 
         if (error) {
+            console.error('[resetUserPassword] Database error:', error)
             return { success: false, error: error.message }
         }
 
+        console.log('[resetUserPassword] Password reset successful')
         return { success: true }
     } catch (error) {
         console.error('Error resetting password:', error)

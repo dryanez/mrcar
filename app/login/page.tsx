@@ -84,7 +84,7 @@ export default function LoginPage() {
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
+                                    className="w-full pl-16 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
                                     placeholder="tu.email@mrcar.cl"
                                 />
                             </div>
@@ -102,7 +102,7 @@ export default function LoginPage() {
                                     required
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
+                                    className="w-full pl-16 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
                                     placeholder="••••••••"
                                 />
                             </div>

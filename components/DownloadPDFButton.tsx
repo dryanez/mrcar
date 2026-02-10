@@ -29,7 +29,7 @@ export default function DownloadPDFButton({ appraisalId }: { appraisalId: string
                 const url = window.URL.createObjectURL(blob)
                 const link = document.createElement('a')
                 link.href = url
-                link.download = result.filename || 'ficha-tasacion.pdf'
+                link.download = 'ficha-tasacion.pdf'
                 document.body.appendChild(link)
                 link.click()
                 document.body.removeChild(link)

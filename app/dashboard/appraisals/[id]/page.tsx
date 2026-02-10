@@ -195,43 +195,47 @@ function AppraisalDetailContent({ appraisalId }: { appraisalId: string }) {
                 </div>
             </div>
 
-            {/* Pricing */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                    Pricing
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <InfoItem
-                        label="Precio Publicado"
-                        value={appraisal.precio_publicado ? `$${appraisal.precio_publicado?.toLocaleString()} CLP` : 'N/A'}
-                    />
-                    <InfoItem
-                        label="Precio Sugerido"
-                        value={appraisal.precio_sugerido ? `$${appraisal.precio_sugerido?.toLocaleString()} CLP` : 'N/A'}
-                    />
-                    <InfoItem
-                        label="Tasacion"
-                        value={appraisal.tasacion ? `$${appraisal.tasacion?.toLocaleString()} CLP` : 'N/A'}
-                    />
-                    <InfoItem
-                        label="Comisión"
-                        value={appraisal.comision ? `$${appraisal.comision?.toLocaleString()} CLP` : 'N/A'}
-                    />
+            {/* Pricing - Only show if any pricing data exists */}
+            {(appraisal.precio_publicado || appraisal.precio_sugerido || appraisal.tasacion || appraisal.comision) && (
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                        Pricing
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <InfoItem
+                            label="Precio Publicado"
+                            value={appraisal.precio_publicado ? `$${appraisal.precio_publicado?.toLocaleString()} CLP` : 'N/A'}
+                        />
+                        <InfoItem
+                            label="Precio Sugerido"
+                            value={appraisal.precio_sugerido ? `$${appraisal.precio_sugerido?.toLocaleString()} CLP` : 'N/A'}
+                        />
+                        <InfoItem
+                            label="Tasacion"
+                            value={appraisal.tasacion ? `$${appraisal.tasacion?.toLocaleString()} CLP` : 'N/A'}
+                        />
+                        <InfoItem
+                            label="Comisión"
+                            value={appraisal.comision ? `$${appraisal.comision?.toLocaleString()} CLP` : 'N/A'}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
 
-            {/* Technical Details */}
-            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                    Technical Details
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <InfoItem label="Airbags" value={appraisal.airbags} />
-                    <InfoItem label="Número de Llaves" value={appraisal.num_llaves} />
-                    <InfoItem label="Neumáticos OK" value={appraisal.neumaticos?.filter((t: boolean) => t).length || 0} />
-                    <InfoItem label="Quién Tomó Fotos" value={appraisal.quien_tomo_fotos} />
+            {/* Technical Details - Only show if any technical data exists */}
+            {(appraisal.airbags || appraisal.num_llaves || appraisal.neumaticos || appraisal.quien_tomo_fotos) && (
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                        Technical Details
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <InfoItem label="Airbags" value={appraisal.airbags} />
+                        <InfoItem label="Número de Llaves" value={appraisal.num_llaves} />
+                        <InfoItem label="Neumáticos OK" value={appraisal.neumaticos?.filter((t: boolean) => t).length || 0} />
+                        <InfoItem label="Quién Tomó Fotos" value={appraisal.quien_tomo_fotos} />
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Features */}
             {appraisal.features && (

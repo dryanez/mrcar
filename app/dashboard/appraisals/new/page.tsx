@@ -607,14 +607,14 @@ export default function NewAppraisalPage() {
                                         Estado de Neumáticos (4 + Repuesto)
                                     </label>
                                     <div className="flex gap-4">
-                                        {neumaticos.map((status, idx) => (
+                                        {[0, 1, 2, 3, 4].map((index) => (
                                             <button
-                                                key={idx}
+                                                key={index}
                                                 type="button"
-                                                onClick={() => toggleNeumatico(idx)}
+                                                onClick={() => toggleNeumatico(index)}
                                                 className={`
                           w-16 h-16 rounded-full flex items-center justify-center border-2 transition-all transform hover:scale-110
-                          ${status
+                          ${neumaticos?.[index]
                                                         ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/30'
                                                         : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-400'
                                                     }

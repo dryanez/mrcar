@@ -171,7 +171,7 @@ export default function NewAppraisalPage() {
     }
 
     const toggleNeumatico = (index: number) => {
-        const newNeumaticos = [...neumaticos]
+        const newNeumaticos = [...(neumaticos || [false, false, false, false, false])]
         newNeumaticos[index] = !newNeumaticos[index]
         setValue('neumaticos', newNeumaticos)
     }

@@ -467,18 +467,30 @@ export default function NewAppraisalPage() {
                                 />
                                 <FormInput
                                     label="Patente *"
+                                    placeholder="AB-1234"
                                     {...register('vehiclePatente')}
                                     error={errors.vehiclePatente?.message}
                                 />
+
+                                {/* NEW: Dígito Verificador */}
                                 <FormInput
-                                    label="Motor (cc)"
-                                    {...register('vehicleMotor')}
-                                    error={errors.vehicleMotor?.message}
+                                    label="Dígito Verificador"
+                                    placeholder="9"
+                                    maxLength={1}
+                                    {...register('digitoPatente')}
                                 />
+
                                 <FormInput
                                     label="Color"
+                                    placeholder="Rojo, Azul, Blanco..."
                                     {...register('vehicleColor')}
                                     error={errors.vehicleColor?.message}
+                                />
+                                <FormInput
+                                    label="Motor"
+                                    placeholder="1.6L, 2.0L..."
+                                    {...register('vehicleMotor')}
+                                    error={errors.vehicleMotor?.message}
                                 />
                                 <FormSelect
                                     label="Transmisión *"
@@ -491,6 +503,33 @@ export default function NewAppraisalPage() {
                                     {...register('vehicleCombustible')}
                                     options={['Bencina', 'Diesel', 'Eléctrico', 'Híbrido']}
                                     error={errors.vehicleCombustible?.message}
+                                />
+
+                                {/* NEW: Vehicle Type */}
+                                <FormInput
+                                    label="Tipo de Auto"
+                                    placeholder="Sedán, SUV, Hatchback..."
+                                    {...register('vehicleBodyType')}
+                                />
+
+                                {/* NEW: Tracción */}
+                                <FormSelect
+                                    label="Tracción"
+                                    {...register('traccion')}
+                                    options={[
+                                        { value: '', label: 'Seleccionar...' },
+                                        { value: '4x2', label: '4x2' },
+                                        { value: '4x4', label: '4x4' },
+                                        { value: 'AWD', label: 'AWD' },
+                                    ]}
+                                />
+
+                                {/* NEW: Línea de Asientos */}
+                                <FormInput
+                                    label="Línea de Asientos"
+                                    type="number"
+                                    placeholder="5, 7, etc."
+                                    {...register('lineaAsientos', { valueAsNumber: true })}
                                 />
                             </div>
                         </div>

@@ -140,15 +140,11 @@ export async function login(email: string, password: string) {
             path: '/'
         })
 
-        return { success: true, user: adminUser }
+        return { success: true, user: user }
+    } catch (error) {
+        console.error('[Auth] Login error:', error)
+        return { success: false, error: 'Error del servidor' }
     }
-
-        // TODO: Add support for regular users with hashed passwords
-        return { success: false, error: 'Credenciales inválidas' }
-} catch (error) {
-    console.error('[Auth] Login error:', error)
-    return { success: false, error: 'Error del servidor' }
-}
 }
 
 export async function logout() {

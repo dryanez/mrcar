@@ -817,6 +817,13 @@ export default function NewAppraisalPage() {
                                     </p>
                                 </div>
 
+                                {/* NEW: Admin Field */}
+                                <FormInput
+                                    label="Quién Tomó Fotos"
+                                    placeholder="Nombre del evaluador/fotógrafo"
+                                    {...register('quienTomoFotos')}
+                                />
+
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         Observaciones Generales

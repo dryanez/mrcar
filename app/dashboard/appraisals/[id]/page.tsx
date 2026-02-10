@@ -244,16 +244,19 @@ function AppraisalDetailContent({ appraisalId }: { appraisalId: string }) {
                         Features
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {Object.entries(appraisal.features).map(([key, value]) => (
-                            <div key={key} className="flex items-center gap-2">
-                                <span className={`w-5 h-5 rounded flex items-center justify-center ${value ? 'bg-green-500' : 'bg-gray-300'}`}>
-                                    {value && '✓'}
-                                </span>
-                                <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
-                                    {key.replace(/([A-Z])/g, ' $1').trim()}
-                                </span>
-                            </div>
-                        ))}
+                        {Object.entries(appraisal.features).map(([key, value]) => {
+                            const isEnabled = Boolean(value)
+                            return (
+                                <div key={key} className="flex items-center gap-2">
+                                    <span className={`w-5 h-5 rounded flex items-center justify-center ${isEnabled ? 'bg-green-500' : 'bg-gray-300'}`}>
+                                        {isEnabled && '✓'}
+                                    </span>
+                                    <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
+                                        {key.replace(/([A-Z])/g, ' $1').trim()}
+                                    </span>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             )}

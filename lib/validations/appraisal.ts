@@ -31,7 +31,7 @@ export const appraisalSchema = z.object({
     // NEW: Additional vehicle details
     digitoPatente: z.string().optional(),
     traccion: z.string().optional(),
-    lineaAsientos: z.string().optional(),
+    lineaAsientos: z.number().min(0).optional(),
 
     // Documentation
     permisoCirculacion: z.boolean().nullable(),

@@ -12,6 +12,7 @@ export interface User {
     sucursal: 'Vitacura' | 'Viña del Mar'
     role: 'admin' | 'user'
     is_active: boolean
+    password_hash?: string  // Optional for security (not always returned)
 }
 
 export interface Session {

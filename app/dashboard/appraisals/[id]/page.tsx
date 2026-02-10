@@ -145,10 +145,14 @@ function AppraisalDetailContent({ appraisalId }: { appraisalId: string }) {
                     <InfoItem label="Year" value={appraisal.vehicle_ano} />
                     <InfoItem label="Kilometraje" value={`${appraisal.vehicle_km?.toLocaleString()} km`} />
                     <InfoItem label="Patente" value={appraisal.vehicle_patente} />
+                    <InfoItem label="Dígito Verificador" value={appraisal.digito_verificador} />
                     <InfoItem label="Color" value={appraisal.vehicle_color} />
                     <InfoItem label="Transmision" value={appraisal.vehicle_transmision} />
                     <InfoItem label="Combustible" value={appraisal.vehicle_combustible} />
                     <InfoItem label="Motor" value={appraisal.vehicle_motor} />
+                    <InfoItem label="Tipo de Auto" value={appraisal.body_type} />
+                    <InfoItem label="Tracción" value={appraisal.traccion} />
+                    <InfoItem label="Línea de Asientos" value={appraisal.linea_asientos} />
                 </div>
             </div>
 
@@ -175,17 +179,80 @@ function AppraisalDetailContent({ appraisalId }: { appraisalId: string }) {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <InfoItem label="Permiso de Circulacion" value={appraisal.permiso_circulacion ? 'Yes' : 'No'} />
+                    <InfoItem label="Permiso Vence" value={appraisal.permiso_vence} />
+                    <InfoItem label="Permiso Comuna" value={appraisal.permiso_comuna} />
                     <InfoItem label="Revision Tecnica" value={appraisal.revision_tecnica ? 'Yes' : 'No'} />
+                    <InfoItem label="Revisión Vence" value={appraisal.revision_vence} />
                     <InfoItem label="SOAP" value={appraisal.soap ? 'Yes' : 'No'} />
+                    <InfoItem label="SOAP Compañía" value={appraisal.soap_compania} />
                     <InfoItem label="Seguro" value={appraisal.seguro ? 'Yes' : 'No'} />
-                    <InfoItem label="En Prenda" value={appraisal.en_prenda ? 'YES ⚠️' : 'No'} />
+                    <InfoItem label="Seguro Compañía" value={appraisal.seguro_compania} />
+                    <InfoItem label="Mantenciones" value={appraisal.mantenciones} />
+                    <InfoItem label="Código SII" value={appraisal.codigo_sii} />
                     <InfoItem label="Numero de Dueños" value={appraisal.num_duenos} />
+                    <InfoItem label="En Prenda" value={appraisal.en_prenda ? 'YES ⚠️' : 'No'} />
+                    <InfoItem label="En Remate" value={appraisal.remate ? 'YES ⚠️' : 'No'} />
+                </div>
+            </div>
+
+            {/* Pricing */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                    Pricing
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InfoItem
+                        label="Precio Publicado"
+                        value={appraisal.precio_publicado ? `$${appraisal.precio_publicado?.toLocaleString()} CLP` : 'N/A'}
+                    />
+                    <InfoItem
+                        label="Precio Sugerido"
+                        value={appraisal.precio_sugerido ? `$${appraisal.precio_sugerido?.toLocaleString()} CLP` : 'N/A'}
+                    />
                     <InfoItem
                         label="Tasacion"
                         value={appraisal.tasacion ? `$${appraisal.tasacion?.toLocaleString()} CLP` : 'N/A'}
                     />
+                    <InfoItem
+                        label="Comisión"
+                        value={appraisal.comision ? `$${appraisal.comision?.toLocaleString()} CLP` : 'N/A'}
+                    />
                 </div>
             </div>
+
+            {/* Technical Details */}
+            <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                    Technical Details
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InfoItem label="Airbags" value={appraisal.airbags} />
+                    <InfoItem label="Número de Llaves" value={appraisal.num_llaves} />
+                    <InfoItem label="Neumáticos OK" value={appraisal.neumaticos?.filter((t: boolean) => t).length || 0} />
+                    <InfoItem label="Quién Tomó Fotos" value={appraisal.quien_tomo_fotos} />
+                </div>
+            </div>
+
+            {/* Features */}
+            {appraisal.features && (
+                <div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-8">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                        Features
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {Object.entries(appraisal.features).map(([key, value]) => (
+                            <div key={key} className="flex items-center gap-2">
+                                <span className={`w-5 h-5 rounded flex items-center justify-center ${value ? 'bg-green-500' : 'bg-gray-300'}`}>
+                                    {value && '✓'}
+                                </span>
+                                <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
+                                    {key.replace(/([A-Z])/g, ' $1').trim()}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Observations */}
             {appraisal.observaciones && (

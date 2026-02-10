@@ -384,18 +384,6 @@ export default function NewAppraisalPage() {
                                         error={errors.clientDireccion?.message}
                                     />
                                 </div>
-
-                                {/* NEW: Contact Info */}
-                                <FormInput
-                                    label="Nombre Contacto"
-                                    placeholder="Persona de contacto"
-                                    {...register('contactNombre')}
-                                />
-                                <FormInput
-                                    label="Teléfono Contacto"
-                                    placeholder="Teléfono alternativo"
-                                    {...register('contactTelefono')}
-                                />
                             </div>
                         </div>
                     )}

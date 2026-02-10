@@ -254,6 +254,86 @@ export async function generateMrCarPDF(appraisalId: string) {
         addText('BLUETOOTH', 20, y, 8, 'bold')
         addText(appraisal.bluetooth ? 'Sí' : 'No', 85, y, 10)
 
+        drawLine(15, y + 2, 110, y + 2)
+        y += 8
+
+        // NEW: Tracción
+        doc.rect(15, y - 5, 65, 7, 'F')
+        addText('TRACCIÓN', 20, y, 8, 'bold')
+        addText(appraisal.traccion || '', 85, y, 10)
+
+        drawLine(15, y + 2, 110, y + 2)
+        y += 8
+
+        // NEW: Línea Asientos
+        doc.rect(15, y - 5, 65, 7, 'F')
+        addText('LÍNEA DE ASIENTOS', 20, y, 8, 'bold')
+        addText(appraisal.linea_asientos?.toString() || '', 85, y, 10)
+
+        drawLine(15, y + 2, 110, y + 2)
+        y += 8
+
+        // NEW: Additional Features
+        const features = appraisal.features || {}
+
+        doc.rect(15, y - 5, 65, 7, 'F')
+        addText('CALEFACTOR ASIENTO', 20, y, 8, 'bold')
+        addText(features.calefactorAsiento ? 'Sí' : 'No', 85, y, 10)
+
+        drawLine(15, y + 2, 110, y + 2)
+        y += 8
+
+        doc.rect(15, y - 5, 65, 7, 'F')
+        addText('GPS', 20, y, 8, 'bold')
+        addText(features.gps ? 'Sí' : 'No', 85, y, 10)
+
+        drawLine(15, y + 2, 110, y + 2)
+        y += 8
+
+        doc.rect(15, y - 5, 65, 7, 'F')
+        addText('SMART KEY', 20, y, 8, 'bold')
+        addText(features.smartKey ? 'Sí' : 'No', 85, y, 10)
+
+        drawLine(15, y + 2, 110, y + 2)
+        y += 8
+
+        doc.rect(15, y - 5, 65, 7, 'F')
+        addText('CARPLAY/ANDROID', 20, y, 8, 'bold')
+        addText(features.carplayAndroid ? 'Sí' : 'No', 85, y, 10)
+
+        y += 15
+
+        // NEW: Pricing Info
+        if (appraisal.precio_publicado || appraisal.comision || appraisal.remate) {
+            addText('═══ INFORMACIÓN ADICIONAL ═══', 15, y, 10, 'bold')
+            y += 10
+
+            if (appraisal.precio_publicado) {
+                addText('Precio Publicado:', 20, y, 9)
+                addText(`$${appraisal.precio_publicado.toLocaleString('es-CL')}`, 70, y, 9, 'bold')
+                y += 7
+            }
+
+            if (appraisal.comision) {
+                addText('Comisión:', 20, y, 9)
+                addText(`$${appraisal.comision.toLocaleString('es-CL')}`, 70, y, 9, 'bold')
+                y += 7
+            }
+
+            if (appraisal.remate) {
+                addText('⚠️ En REMATE', 20, y, 9, 'bold')
+                y += 7
+            }
+
+            if (appraisal.quien_tomo_fotos) {
+                addText('Fotos por:', 20, y, 8)
+                addText(appraisal.quien_tomo_fotos, 50, y, 8)
+                y += 7
+            }
+
+            y += 8
+        }
+
         y += 15
 
         // ===== VALUATION (BIG GREEN TEXT) =====

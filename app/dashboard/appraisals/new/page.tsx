@@ -396,19 +396,6 @@ export default function NewAppraisalPage() {
                                     placeholder="Teléfono alternativo"
                                     {...register('contactTelefono')}
                                 />
-
-                                {/* NEW: Observations */}
-                                <div className="md:col-span-2">
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Observaciones (OBS)
-                                    </label>
-                                    <textarea
-                                        {...register('observaciones')}
-                                        rows={3}
-                                        className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
-                                        placeholder="Notas generales sobre la tasación o vehículo..."
-                                    />
-                                </div>
                             </div>
                         </div>
                     )}

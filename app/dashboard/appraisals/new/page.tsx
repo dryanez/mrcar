@@ -470,7 +470,7 @@ export default function NewAppraisalPage() {
                                     <FormInput
                                         label="Vencimiento"
                                         type="month"
-                                        {...register('vencePermiso')}
+                                        {...register('permisoVence')}
                                     />
                                 </div>
 
@@ -503,7 +503,7 @@ export default function NewAppraisalPage() {
                                     <FormInput
                                         label="Vencimiento"
                                         type="month"
-                                        {...register('venceRevision')}
+                                        {...register('revisionVence')}
                                     />
                                 </div>
 

@@ -653,6 +653,93 @@ export default function NewAppraisalPage() {
                                         setValueAs: (v) => v === "" ? undefined : Number(v)
                                     })}
                                 />
+
+                                {/* NEW: Additional Documentation Fields */}
+                                <FormInput
+                                    label="Comuna (Permiso)"
+                                    placeholder="Comuna del permiso"
+                                    {...register('permisoComuna')}
+                                />
+
+                                <FormInput
+                                    label="Compañía SOAP"
+                                    placeholder="Nombre de la compañía"
+                                    {...register('soapCompania')}
+                                />
+
+                                <FormInput
+                                    label="Compañía Seguro"
+                                    placeholder="Nombre de la compañía"
+                                    {...register('seguroCompania')}
+                                />
+
+                                <FormInput
+                                    label="Mantenciones"
+                                    placeholder="Registro de mantenciones"
+                                    {...register('mantenciones')}
+                                />
+
+                                <FormInput
+                                    label="Código SII"
+                                    placeholder="Código tributario"
+                                    {...register('codigoSii')}
+                                />
+
+                                {/* NEW: Pricing Section */}
+                                <div className="md:col-span-2 border-t border-gray-300 dark:border-gray-700 pt-6 mt-4">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                        📊 Información de Precios
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <FormInput
+                                            label="Precio Publicado"
+                                            type="number"
+                                            placeholder="Precio en publicación"
+                                            {...register('precioPublicado', {
+                                                setValueAs: (v) => v === "" ? undefined : Number(v)
+                                            })}
+                                        />
+
+                                        <FormInput
+                                            label="Precio Sugerido"
+                                            type="number"
+                                            placeholder="Precio sugerido compra"
+                                            {...register('precioSugerido', {
+                                                setValueAs: (v) => v === "" ? undefined : Number(v)
+                                            })}
+                                        />
+
+                                        <FormInput
+                                            label="Comisión"
+                                            type="number"
+                                            placeholder="Comisión (CLP)"
+                                            {...register('comision', {
+                                                setValueAs: (v) => v === "" ? undefined : Number(v)
+                                            })}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* NEW: Legal Status Section */}
+                                <div className="md:col-span-2 border-t border-gray-300 dark:border-gray-700 pt-6">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                        ⚖️ Estado Legal
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-xl">
+                                            <label className="flex items-center gap-3 cursor-pointer">
+                                                <input
+                                                    type="checkbox"
+                                                    {...register('enRemate')}
+                                                    className="w-6 h-6 rounded accent-orange-600"
+                                                />
+                                                <span className="font-bold text-lg text-gray-700 dark:text-gray-300">
+                                                    ¿EN REMATE?
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}

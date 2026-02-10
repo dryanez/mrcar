@@ -32,6 +32,10 @@ export async function createAppraisal(data: AppraisalFormData) {
                 client_direccion: data.clientDireccion || null,
                 client_comuna: data.clientComuna || null,
 
+                // NEW: Contact Info
+                contact_name: data.contactNombre || null,
+                contact_phone: data.contactTelefono || null,
+
                 // Vehicle Info
                 vehicle_marca: data.vehicleMarca,
                 vehicle_modelo: data.vehicleModelo,
@@ -44,16 +48,35 @@ export async function createAppraisal(data: AppraisalFormData) {
                 vehicle_transmision: data.vehicleTransmision,
                 vehicle_combustible: data.vehicleCombustible,
 
+                // NEW: Additional Vehicle Fields
+                body_type: data.vehicleBodyType || null,
+                digito_verificador: data.digitoPatente || null,
+                traccion: data.traccion || null,
+                linea_asientos: data.lineaAsientos || null,
+
                 // Documentation
                 permiso_circulacion: data.permisoCirculacion,
                 vence_permiso: data.permisoVence || null,
+                permiso_comuna: data.permisoComuna || null, // NEW
                 revision_tecnica: data.revisionTecnica,
                 vence_revision: data.revisionVence || null,
                 soap: data.soap,
+                soap_compania: data.soapCompania || null, // NEW
                 seguro: data.seguro,
+                seguro_compania: data.seguroCompania || null, // NEW
+                mantenciones: data.mantenciones || null, // NEW
                 num_duenos: data.numDueños || null,
+                codigo_sii: data.codigoSii || null, // NEW
+
+                // Pricing (NEW)
+                precio_publicado: data.precioPublicado || null,
+                precio_sugerido: data.precioSugerido || null,
                 tasacion: data.tasacion || null,
+                comision: data.comision || null,
+
+                // Legal
                 en_prenda: data.enPrenda,
+                remate: data.enRemate || false, // NEW
 
                 // Features
                 features: data.features,
@@ -63,6 +86,9 @@ export async function createAppraisal(data: AppraisalFormData) {
                 num_llaves: data.numLlaves,
                 neumaticos: data.neumaticos,
                 observaciones: data.observaciones || null,
+
+                // NEW: Admin
+                quien_tomo_fotos: data.quienTomoFotos || null,
 
                 // User Tracking
                 created_by_user_id: currentUser.id,

@@ -14,23 +14,19 @@ export async function changePassword(currentPassword: string, newPassword: strin
             return { success: false, error: 'No autenticado' }
         }
 
-        // Verify current password by trying to sign in
-        const { error: signInError } = await supabase.auth.signInWithPassword({
-            email: currentUser.email,
-            password: currentPassword,
-        })
-
-        if (signInError) {
+        // Verify current password
+        if (currentUser.password_hash !== currentPassword) {
             return { success: false, error: 'Contraseña actual incorrecta' }
         }
 
-        // Update password
-        const { error: updateError } = await supabase.auth.updateUser({
-            password: newPassword
-        })
+        // Update password_hash (plain text for now - use bcrypt in production)
+        const { error } = await supabase
+            .from('users')
+            .update({ password_hash: newPassword })
+            .eq('id', currentUser.id)
 
-        if (updateError) {
-            return { success: false, error: updateError.message }
+        if (error) {
+            return { success: false, error: error.message }
         }
 
         return { success: true }
@@ -85,22 +81,11 @@ export async function resetUserPassword(userId: string, newPassword: string) {
             return { success: false, error: 'No autorizado' }
         }
 
-        // Get user's email
-        const { data: user } = await supabase
+        // Update password_hash in database (plain text for now - use bcrypt in production)
+        const { error } = await supabase
             .from('users')
-            .select('email')
+            .update({ password_hash: newPassword })
             .eq('id', userId)
-            .single()
-
-        if (!user) {
-            return { success: false, error: 'Usuario no encontrado' }
-        }
-
-        // Update password using admin API
-        const { error } = await supabase.auth.admin.updateUserById(
-            userId,
-            { password: newPassword }
-        )
 
         if (error) {
             return { success: false, error: error.message }

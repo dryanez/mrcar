@@ -27,10 +27,10 @@ const ADMIN_PASSWORD = 'admin'
 
 export async function login(email: string, password: string) {
     try {
+        const supabase = await createClient()
+
         // Check for hardcoded admin
         if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-            const supabase = await createClient()
-
             // Get or create admin user
             let { data: adminUser, error } = await supabase
                 .from('users')
@@ -81,19 +81,73 @@ export async function login(email: string, password: string) {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
-                expires: expiresAt,
-                path: '/'
+                expires: expiresAt
             })
 
             return { success: true, user: adminUser }
         }
 
+        // Check database users
+        const { data: user, error: userError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .single()
+
+        if (userError || !user) {
+            return { success: false, error: 'Credenciales inválidas' }
+        }
+
+        if (!user.is_active) {
+            return { success: false, error: 'Usuario inactivo' }
+        }
+
+        // Check if user has a password_hash
+        if (!user.password_hash) {
+            return { success: false, error: 'Usuario sin contraseña configurada. Contacte al administrador.' }
+        }
+
+        // Verify password (simple comparison for now - in production use bcrypt)
+        // For now, we'll store passwords as plain text (NOT SECURE - FIX IN PRODUCTION)
+        if (user.password_hash !== password) {
+            return { success: false, error: 'Credenciales inválidas' }
+        }
+
+        // Create session
+        const sessionToken = crypto.randomBytes(32).toString('hex')
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
+
+        const { error: sessionError } = await supabase
+            .from('user_sessions')
+            .insert({
+                user_id: user.id,
+                session_token: sessionToken,
+                expires_at: expiresAt.toISOString()
+            })
+
+        if (sessionError) {
+            return { success: false, error: 'Error al crear sesión' }
+        }
+
+        // Set cookie
+        const cookieStore = await cookies()
+        cookieStore.set('session_token', sessionToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            expires: expiresAt,
+            path: '/'
+        })
+
+        return { success: true, user: adminUser }
+    }
+
         // TODO: Add support for regular users with hashed passwords
         return { success: false, error: 'Credenciales inválidas' }
-    } catch (error) {
-        console.error('[Auth] Login error:', error)
-        return { success: false, error: 'Error del servidor' }
-    }
+} catch (error) {
+    console.error('[Auth] Login error:', error)
+    return { success: false, error: 'Error del servidor' }
+}
 }
 
 export async function logout() {

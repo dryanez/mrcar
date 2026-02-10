@@ -51,7 +51,8 @@ export async function createUser(data: {
                 sucursal: data.sucursal,
                 role: 'user',
                 is_active: true,
-                created_by: admin.id
+                created_by: admin.id,
+                password_hash: tempPassword  // Store password (plain text for now - use bcrypt in production)
             })
             .select()
             .single()

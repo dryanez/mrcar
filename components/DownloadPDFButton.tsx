@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Download, Loader2 } from 'lucide-react'
-import { generateFilledPDF } from '@/lib/actions/pdf-actions'
+import { Download, Loader2, AlertCircle } from 'lucide-react'
+import { generateMrCarPDF } from '@/lib/actions/pdf-generator'
 
 export default function DownloadPDFButton({ appraisalId }: { appraisalId: string }) {
     const [loading, setLoading] = useState(false)
@@ -10,10 +10,10 @@ export default function DownloadPDFButton({ appraisalId }: { appraisalId: string
 
     const handleDownload = async () => {
         setLoading(true)
-        setError(null)
+        setError('')
 
         try {
-            const result = await generateFilledPDF(appraisalId)
+            const result = await generateMrCarPDF(appraisalId)
 
             if (result.success && result.data) {
                 // Convert base64 to blob

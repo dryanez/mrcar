@@ -77,14 +77,14 @@ export default function LoginPage() {
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Email
                             </label>
-                            <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-3.5 focus-within:ring-2 focus-within:ring-gray-900 dark:focus-within:ring-gray-600 focus-within:border-transparent transition-all">
+                                <Mail className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                                 <input
                                     type="email"
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
+                                    className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 outline-none text-base"
                                     placeholder="tu.email@mrcar.cl"
                                 />
                             </div>
@@ -95,14 +95,14 @@ export default function LoginPage() {
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Contraseña
                             </label>
-                            <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+                            <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-3.5 focus-within:ring-2 focus-within:ring-gray-900 dark:focus-within:ring-gray-600 focus-within:border-transparent transition-all">
+                                <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                                 <input
                                     type="password"
                                     required
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-600 focus:border-transparent outline-none transition-all text-base"
+                                    className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 outline-none text-base"
                                     placeholder="••••••••"
                                 />
                             </div>

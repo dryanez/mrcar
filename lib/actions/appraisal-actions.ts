@@ -46,9 +46,9 @@ export async function createAppraisal(data: AppraisalFormData) {
 
                 // Documentation
                 permiso_circulacion: data.permisoCirculacion,
-                vence_permiso: data.vencePermiso || null,
+                vence_permiso: data.permisoVence || null,
                 revision_tecnica: data.revisionTecnica,
-                vence_revision: data.venceRevision || null,
+                vence_revision: data.revisionVence || null,
                 soap: data.soap,
                 seguro: data.seguro,
                 num_duenos: data.numDueños || null,

@@ -128,14 +128,14 @@ export default function NewUserPage() {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Nombre *
                         </label>
-                        <div className="relative">
-                            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
+                            <User className="w-5 h-5 text-gray-400 flex-shrink-0" />
                             <input
                                 type="text"
                                 required
                                 value={formData.nombre}
                                 onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                                className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+                                className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 outline-none text-base"
                                 placeholder="Juan"
                             />
                         </div>
@@ -146,14 +146,14 @@ export default function NewUserPage() {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Apellido *
                         </label>
-                        <div className="relative">
-                            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
+                            <User className="w-5 h-5 text-gray-400 flex-shrink-0" />
                             <input
                                 type="text"
                                 required
                                 value={formData.apellido}
                                 onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
-                                className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+                                className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 outline-none text-base"
                                 placeholder="Pérez"
                             />
                         </div>
@@ -164,14 +164,14 @@ export default function NewUserPage() {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Email *
                         </label>
-                        <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
+                            <Mail className="w-5 h-5 text-gray-400 flex-shrink-0" />
                             <input
                                 type="email"
                                 required
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white"
+                                className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 outline-none text-base"
                                 placeholder="juan.perez@mrcar.cl"
                             />
                         </div>
@@ -182,13 +182,13 @@ export default function NewUserPage() {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Sucursal *
                         </label>
-                        <div className="relative">
-                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-3 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent transition-all">
+                            <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0" />
                             <select
                                 required
                                 value={formData.sucursal}
                                 onChange={(e) => setFormData({ ...formData, sucursal: e.target.value as 'Vitacura' | 'Viña del Mar' })}
-                                className="w-full pl-14 pr-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900 dark:text-white appearance-none"
+                                className="flex-1 bg-transparent text-gray-900 dark:text-white outline-none text-base appearance-none cursor-pointer"
                             >
                                 <option value="Vitacura">Vitacura</option>
                                 <option value="Viña del Mar">Viña del Mar</option>

@@ -234,3 +234,8 @@ body {
     padding-right: 2rem;
   }
 }
+
+/* iPhone safe area for bottom tab bar */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
